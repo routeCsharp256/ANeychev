@@ -15,12 +15,14 @@ ProjectSection(SolutionItems) = preProject
 	README.md = README.md
 	Dockerfile = Dockerfile
 	.dockerignore = .dockerignore
-	docker-compose.yml = docker-compose.yml
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{D3C4BC4D-6F9A-4367-8C3C-8D0FA8C6BDBB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{9F7C89A6-AA74-45D2-9B8B-41BEA66FC69E}"
+ProjectSection(SolutionItems) = preProject
+	deploy\docker-compose.yml = deploy\docker-compose.yml
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".o3", ".o3", "{E7688A24-84C3-4EAE-AB65-D6AFCB99F6A3}"
 EndProject
