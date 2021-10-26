@@ -5,4 +5,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OzonEdu.Infrastructure\OzonEdu.Infrastructure.csproj" />
+  </ItemGroup>
 </Project>
