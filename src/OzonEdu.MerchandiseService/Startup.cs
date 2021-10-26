@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using OzonEdu.MerchandiseService.GrpcServices;
 using OzonEdu.MerchandiseService.Services;
 using OzonEdu.MerchandiseService.Services.Interfaces;
 
@@ -11,6 +12,7 @@ namespace OzonEdu.MerchandiseService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IMerchService, MerchService>();
+            services.AddGrpc();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -18,6 +20,7 @@ namespace OzonEdu.MerchandiseService
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<MerchandiseGrpcService>();
                 endpoints.MapControllers();
             });
         }
