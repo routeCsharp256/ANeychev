@@ -9,7 +9,11 @@ namespace OzonEdu.Infrastructure.StartupFilters
     {
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
         {
-            return app => { app.Map("/live", builder => builder.UseMiddleware<LiveMiddleware>()); };
+            return app =>
+            {
+                app.Map("/live", builder => builder.UseMiddleware<LiveMiddleware>());
+                next(app);
+            };
         }
     }
 }
