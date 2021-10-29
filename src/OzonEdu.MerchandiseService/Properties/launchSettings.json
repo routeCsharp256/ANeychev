@@ -1,9 +1,19 @@
 ﻿{
   "profiles": {
-    "OzonEdu.MerchandiseService": {
+    "OzonEdu.MerchandiseService.Production": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    },
+    "OzonEdu.MerchandiseService.Development": {
+      "commandName": "Project",
+      "dotnetRunMessages": "true",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
