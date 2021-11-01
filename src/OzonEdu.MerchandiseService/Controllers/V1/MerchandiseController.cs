@@ -13,7 +13,7 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
     [ApiController]
     [Route("v1/merchandises/[controller]/[action]/{employeeId:long}")]
     [Produces("application/json")]
-    public class MerchandiseController : ControllerBase
+    public sealed class MerchandiseController : ControllerBase
     {
         private readonly IMerchService _merchService;
 

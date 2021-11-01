@@ -11,7 +11,7 @@ namespace OzonEdu.MerchandiseService.HttpClient
         Task<List<StockItemResponse>> V1GetAll(CancellationToken token);
     }
 
-    public class StockHttpClient : IStockHttpClient
+    public sealed class StockHttpClient : IStockHttpClient
     {
         private readonly System.Net.Http.HttpClient _httpClient;
 

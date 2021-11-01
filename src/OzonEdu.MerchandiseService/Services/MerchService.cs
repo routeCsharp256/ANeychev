@@ -6,7 +6,7 @@ using OzonEdu.MerchandiseService.Services.Interfaces;
 
 namespace OzonEdu.MerchandiseService.Services
 {
-    public class MerchService : IMerchService
+    public sealed class MerchService : IMerchService
     {
         public async Task<List<MerchItemResponse>> GetInfoAsync(long employeeId, CancellationToken cancellationToken)
         {

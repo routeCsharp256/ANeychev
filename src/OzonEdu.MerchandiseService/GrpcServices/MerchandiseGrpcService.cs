@@ -7,7 +7,7 @@ using OzonEdu.MerchandiseService.Services.Interfaces;
 
 namespace OzonEdu.MerchandiseService.GrpcServices
 {
-    public class MerchandiseGrpcService : MerchandiseGrpc.MerchandiseGrpcBase
+    public sealed class MerchandiseGrpcService : MerchandiseGrpc.MerchandiseGrpcBase
     {
         private readonly IMerchService _merchService;
 

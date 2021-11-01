@@ -5,7 +5,7 @@ using OzonEdu.Infrastructure.Middlewares;
 
 namespace OzonEdu.Infrastructure.StartupFilters
 {
-    public class ReadyStartupFilter : IStartupFilter
+    public sealed class ReadyStartupFilter : IStartupFilter
     {
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
         {

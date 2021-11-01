@@ -8,7 +8,7 @@ using OzonEdu.MerchandiseService.Services.Interfaces;
 
 namespace OzonEdu.MerchandiseService
 {
-    public class Startup
+    public sealed class Startup
     {
         public void ConfigureServices(IServiceCollection services)
         {

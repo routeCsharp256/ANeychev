@@ -1,6 +1,6 @@
 namespace OzonEdu.MerchandiseService.HttpModels
 {
-    public class StockItemResponse
+    public sealed class StockItemResponse
     {
         public long ItemId { get; set; }
         
