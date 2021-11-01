@@ -1,0 +1,37 @@
+syntax = "proto3";
+option csharp_namespace = "OzonEdu.MerchandiseService.Grpc";
+package MerchandiseService;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+service MerchandiseGrpc {
+  rpc GiveOut (GiveOutRequest) returns (GiveOutResponse);
+  rpc GetInfo (GetInfoRequest) returns (GetInfoResponse);
+}
+
+message GiveOutRequest
+{
+  int64 employee_id = 1;
+}
+
+message GiveOutResponse
+{  
+}
+
+message GetInfoRequest
+{
+  int64 employee_id = 1;
+}
+
+message GetInfoResponse
+{
+  repeated MerchItemResponseUnit items = 1;
+}
+
+message MerchItemResponseUnit
+{
+  int64 item_id = 1;
+  string item_name = 2;
+  int32 quantity = 3;
+}
