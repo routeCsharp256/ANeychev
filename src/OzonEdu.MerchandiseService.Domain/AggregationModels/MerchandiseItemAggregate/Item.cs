@@ -1,4 +1,4 @@
-namespace OzonEdu.MerchandiseService.Models
+namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchandiseItemAggregate
 {
     public sealed class Item
     {
