@@ -5,4 +5,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\OzonEdu.MerchandiseService.Domain\OzonEdu.MerchandiseService.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
