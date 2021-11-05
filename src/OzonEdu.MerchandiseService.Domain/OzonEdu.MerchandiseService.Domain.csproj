@@ -8,10 +8,4 @@
       <PackageReference Include="MediatR" Version="9.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Events" />
-      <Folder Include="Exceptions\MerchandiseItemAggregate" />
-      <Folder Include="Exceptions\MerchandiseRequestAggregate" />
-    </ItemGroup>
-
 </Project>
