@@ -11,16 +11,14 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
 
         public BirthDay(DateTime value)
         {
+            if (DateTime.Now < value) throw new ArgumentException(nameof(BirthDay));
             _value = value;
-            // Todo добавить проверку на 18 лет
-            // Todo добавить проверку на "завтра"
         }
         
         public BirthDay(string value)
         {
-            if (DateTime.TryParse(value, out _value)) throw new ArgumentException();
-            // Todo добавить проверку на 18 лет
-            // Todo добавить проверку на "завтра"
+            if (DateTime.TryParse(value, out _value)) throw new ArgumentException(nameof(BirthDay));
+            if (DateTime.Now < _value) throw new ArgumentException(nameof(BirthDay));
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
