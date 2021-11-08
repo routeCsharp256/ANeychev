@@ -14,18 +14,18 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// <summary>
         /// Идентификатор заявки на выдачу мерча
         /// </summary>
-        public RequestNumber Id { get; }
-        
+        public RequestNumber RequestNumber { get; }
+
         /// <summary>
         /// Статус заявки на выдачу мерча
         /// </summary>
         public RequestStatus Status { get; private set; }
-        
+
         /// <summary>
         /// Идентификатор сотрудника
         /// </summary>
         public long EmployeeId { get; private set; }
-        
+
         /// <summary>
         /// Электронная почта сотрудника
         /// </summary>
@@ -35,15 +35,15 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// Список мерча
         /// </summary>
         public IReadOnlyCollection<MerchItem> Items => _items;
-        
-        private List<MerchItem> _items = new ();
+
+        private List<MerchItem> _items = new();
 
         /// <summary>
         /// Пустой конструктор
         /// </summary>
         public MerchRequest()
         {
-            Id = new RequestNumber(new Guid());
+            RequestNumber = new RequestNumber(new Guid());
             Status = RequestStatus.Draft;
         }
 
@@ -67,7 +67,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// <param name="employeeId"></param>
         /// <param name="email"></param>
         /// <param name="items"></param>
-        public MerchRequest(long employeeId, 
+        public MerchRequest(long employeeId,
             Email email,
             List<MerchItem> items)
             : this(employeeId, email)
@@ -101,25 +101,19 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// <exception cref="Exception"></exception>
         public void StartWork(List<MerchItem> items)
         {
-            if (!Equals(Status, RequestStatus.Created))
-            {
-                throw new Exception("Incorrect request status");
-            }
+            if (!Equals(Status, RequestStatus.Created)) throw new Exception("Incorrect request status");
 
             _items = items;
             Status = RequestStatus.InProgress;
         }
-        
+
         /// <summary>
         /// Завершить работу по заявке
         /// </summary>
         /// <exception cref="Exception"></exception>
         public void Complete()
         {
-            if (!Equals(Status, RequestStatus.InProgress))
-            {
-                throw new Exception("Incorrect request status");
-            }
+            if (!Equals(Status, RequestStatus.InProgress)) throw new Exception("Incorrect request status");
 
             Status = RequestStatus.Done;
         }
