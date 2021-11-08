@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using OzonEdu.MerchandiseService.GrpcServices;
+using OzonEdu.MerchandiseService.Infrastructure.Extensions;
 using OzonEdu.MerchandiseService.Services;
 using OzonEdu.MerchandiseService.Services.Interfaces;
 
@@ -13,6 +14,7 @@ namespace OzonEdu.MerchandiseService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IMerchService, MerchService>();
+            services.AddInfrastructureServices();
             services.AddGrpc();
         }
 
