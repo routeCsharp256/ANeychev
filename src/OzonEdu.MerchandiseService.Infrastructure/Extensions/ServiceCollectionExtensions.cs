@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using System.Reflection;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using OzonEdu.MerchandiseService.Infrastructure.Handlers.MerchPackAggregate;
 
 namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
 {
@@ -16,11 +16,11 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
         /// <returns>Объект <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
-            services.AddMediatR(typeof(CreateMerchItemCommandHandler).Assembly);
-            
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+
             return services;
         }
-        
+
         /// <summary>
         /// Добавление в DI контейнер инфраструктурных репозиториев
         /// </summary>
@@ -28,8 +28,6 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
         /// <returns>Объект <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services)
         {
-            
-            
             return services;
         }
     }
