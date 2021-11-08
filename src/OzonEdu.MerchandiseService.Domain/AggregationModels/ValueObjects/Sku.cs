@@ -3,11 +3,14 @@ using OzonEdu.MerchandiseService.Domain.Models;
 
 namespace OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects
 {
-    public class EmployeePersonnelNumber : ValueObject
+    /// <summary>
+    /// Товарная позиция, единица складского учёта
+    /// </summary>
+    public sealed class Sku : ValueObject
     {
         public long Value { get; }
         
-        public EmployeePersonnelNumber(long sku)
+        public Sku(long sku)
         {
             Value = sku;
         }
