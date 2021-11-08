@@ -13,7 +13,7 @@ namespace OzonEdu.MerchandiseService.Services
             throw new System.NotImplementedException();
         }
 
-        public async Task GiveOutAsync(long employeeId, CancellationToken cancellationToken)
+        public async Task<int> GetMerchPackAsync(long employeeId, CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
         }

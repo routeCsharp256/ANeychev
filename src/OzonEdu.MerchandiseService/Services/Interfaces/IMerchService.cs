@@ -9,6 +9,6 @@ namespace OzonEdu.MerchandiseService.Services.Interfaces
     {
         Task<List<MerchItemResponse>> GetInfoAsync(long employeeId, CancellationToken cancellationToken);
 
-        Task GiveOutAsync(long employeeId, CancellationToken cancellationToken);
+        Task<int> GetMerchPackAsync(long employeeId, CancellationToken cancellationToken);
     }
 }
