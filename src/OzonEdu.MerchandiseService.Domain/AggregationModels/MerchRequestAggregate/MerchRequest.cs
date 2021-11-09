@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects;
+using OzonEdu.MerchandiseService.Domain.Events.MerchRequestAggregate;
 using OzonEdu.MerchandiseService.Domain.Models;
 
 namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate
@@ -108,6 +109,19 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         }
 
         /// <summary>
+        /// Отменить заявку
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        public void Cancel()
+        {
+            if (!Equals(Status, RequestStatus.InProgress)) throw new Exception("Incorrect request status");
+            
+            Status = RequestStatus.Canceled;
+            var merchRequestWasCanceledDomainEvent = new MerchRequestWasCanceledDomainEvent();
+            AddDomainEvent(merchRequestWasCanceledDomainEvent);
+        }
+
+        /// <summary>
         /// Завершить работу по заявке
         /// </summary>
         /// <exception cref="Exception"></exception>
@@ -116,6 +130,8 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
             if (!Equals(Status, RequestStatus.InProgress)) throw new Exception("Incorrect request status");
 
             Status = RequestStatus.Done;
+            var merchRequestWasDoneDomainEvent = new MerchRequestWasDoneDomainEvent();
+            AddDomainEvent(merchRequestWasDoneDomainEvent);
         }
     }
 }
