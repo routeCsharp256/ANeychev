@@ -39,7 +39,7 @@ namespace OzonEdu.MerchandiseService.GrpcServices
 
         public override async Task<GiveOutResponse> GiveOut(GiveOutRequest request, ServerCallContext context)
         {
-            await _merchService.GiveOutAsync(request.EmployeeId, context.CancellationToken);
+            await _merchService.GetMerchPackAsync(request.EmployeeId, context.CancellationToken);
             return new GiveOutResponse();
         }
     }
