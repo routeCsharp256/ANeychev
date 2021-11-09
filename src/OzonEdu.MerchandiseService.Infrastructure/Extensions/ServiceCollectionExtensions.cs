@@ -1,6 +1,10 @@
 ﻿using System.Reflection;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
+using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
+using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
+using OzonEdu.MerchandiseService.Infrastructure.Stubs;
 
 namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
 {
@@ -28,6 +32,10 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
         /// <returns>Объект <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services)
         {
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IMerchPackRepository, MerchPackRepository>();
+            services.AddScoped<IMerchRequestRepository, MerchRequestRepository>();
+            
             return services;
         }
     }
