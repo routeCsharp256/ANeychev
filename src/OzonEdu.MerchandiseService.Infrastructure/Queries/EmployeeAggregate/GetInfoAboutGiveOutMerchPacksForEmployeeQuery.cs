@@ -7,7 +7,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Queries.EmployeeAggregate
     /// <summary>
     /// Получить список набор мерча, которые выдавались сотруднику
     /// </summary>
-    public class GetInfoAboutGiveOutMerchPacksForEmployeeQuery : IRequest<List<MerchPack>>
+    public class GetInfoAboutGiveOutMerchPacksForEmployeeQuery : IRequest<List<MerchItem>>
     {
         /// <summary>
         /// Идентификатор сотрудника
