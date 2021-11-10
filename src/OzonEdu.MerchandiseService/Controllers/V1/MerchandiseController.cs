@@ -4,8 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
-using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Grpc;
 using OzonEdu.MerchandiseService.Infrastructure.Commands.CreateMerchRequest;
 using OzonEdu.MerchandiseService.Infrastructure.Queries.EmployeeAggregate;
@@ -16,7 +14,7 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
     ///     Сервис учёта выдачи мерча сотрудникам
     /// </summary>
     [ApiController]
-    [Route("v1/merchandises/[controller]/[action]/{employeeId:long}")]
+    [Route("v1/merchandises/[controller]/[action]")]
     [Produces("application/json")]
     public sealed class MerchandiseController : ControllerBase
     {
@@ -39,7 +37,7 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
         /// <param name="cancellationToken">токен отмены</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("{merchPackTypeId:int}")]
+        [Route("{employeeId:long}/{merchPackTypeId:int}")]
         public async Task<ActionResult<int>> GetMerchPack(long employeeId, int merchPackTypeId,
             CancellationToken cancellationToken)
         {
@@ -60,7 +58,7 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
         /// <param name="employeeId">идентификатор работника</param>
         /// <param name="cancellationToken">токен отмены</param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{employeeId:long}")]
         public async Task<ActionResult<GetInfoResponse>> GetInfoAboutMerchPacks(long employeeId,
             CancellationToken cancellationToken)
         {
