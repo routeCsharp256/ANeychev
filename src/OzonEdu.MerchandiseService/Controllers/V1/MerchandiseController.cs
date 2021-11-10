@@ -1,14 +1,14 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CSharpCourse.Core.Lib.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
+using OzonEdu.MerchandiseService.Grpc;
 using OzonEdu.MerchandiseService.Infrastructure.Commands.CreateMerchRequest;
 using OzonEdu.MerchandiseService.Infrastructure.Queries.EmployeeAggregate;
-using OzonEdu.MerchandiseService.Services.Interfaces;
 
 namespace OzonEdu.MerchandiseService.Controllers.V1
 {
@@ -35,18 +35,18 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
         ///     Запрос на выдачу мерча
         /// </summary>
         /// <param name="employeeId">идентификатор работника</param>
-        /// <param name="merchPackType">идентификатор набора мерча</param>
+        /// <param name="merchPackTypeId">идентификатор набора мерча</param>
         /// <param name="cancellationToken">токен отмены</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("{merchPackType}")]
-        public async Task<ActionResult<int>> GetMerchPack(long employeeId, MerchType merchPackType,
+        [Route("{merchPackTypeId:int}")]
+        public async Task<ActionResult<int>> GetMerchPack(long employeeId, int merchPackTypeId,
             CancellationToken cancellationToken)
         {
             var query = new CreateMerchRequestCommand
             {
                 EmployeeId = employeeId,
-                MerchPackType = merchPackType
+                MerchPackTypeId = merchPackTypeId
             };
 
             var result = await _mediator.Send(query, cancellationToken);
@@ -61,7 +61,7 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
         /// <param name="cancellationToken">токен отмены</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<List<MerchPack>>> GetInfoAboutMerchPacks(long employeeId,
+        public async Task<ActionResult<GetInfoResponse>> GetInfoAboutMerchPacks(long employeeId,
             CancellationToken cancellationToken)
         {
             var getInfoAboutGiveOutMerchPacksForEmployeeQuery = new GetInfoAboutGiveOutMerchPacksForEmployeeQuery
@@ -70,7 +70,18 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
             };
             var result = await _mediator.Send(getInfoAboutGiveOutMerchPacksForEmployeeQuery, cancellationToken);
 
-            return Ok(result);
+            return new GetInfoResponse
+            {
+                Items =
+                {
+                    result.Select(x => new MerchItemResponseUnit
+                    {
+                        ItemId = x.Sku.Value,
+                        ItemName = x.Name.Value,
+                        Quantity = x.Quantity.Value
+                    })
+                }
+            };
         }
     }
 }
