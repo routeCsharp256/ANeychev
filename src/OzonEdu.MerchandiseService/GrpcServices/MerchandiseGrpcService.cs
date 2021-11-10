@@ -39,7 +39,7 @@ namespace OzonEdu.MerchandiseService.GrpcServices
                 EmployeeId = request.EmployeeId
             };
 
-            var result = await _mediator.Send(getInfoAboutGiveOutMerchPacksForEmployeeQuery, default);
+            var result = await _mediator.Send(getInfoAboutGiveOutMerchPacksForEmployeeQuery, context.CancellationToken);
 
             return new GetInfoResponse
             {

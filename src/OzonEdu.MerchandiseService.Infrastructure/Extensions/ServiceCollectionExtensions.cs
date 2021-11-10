@@ -1,10 +1,15 @@
 ﻿using System.Reflection;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
+using OzonEdu.MerchandiseService.Infrastructure.Jobs;
 using OzonEdu.MerchandiseService.Infrastructure.Stubs;
+using OzonEdu.MerchandiseService.Infrastructure.Workers;
+using OzonEdu.MerchandiseService.Infrastructure.Workers.Interfaces;
+using Quartz;
 
 namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
 {
@@ -17,10 +22,26 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
         /// Добавление в DI контейнер инфраструктурных сервисов
         /// </summary>
         /// <param name="services">Объект IServiceCollection</param>
+        /// <param name="configuration"></param>
         /// <returns>Объект <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddScoped<IMerchRequestWorker, MerchRequestWorker>();
+            services.AddTransient<MerchRequestJob>();
+            services.AddQuartz(options =>
+            {
+                options.UseMicrosoftDependencyInjectionJobFactory();
+                options.ScheduleJob<MerchRequestJob>(trigger => trigger.StartNow()
+                    .WithIdentity(nameof(MerchRequestJob))
+                    .WithCronSchedule(configuration.GetSection("Scheduler").GetSection("CronStringForJob").Value));
+#if DEBUG
+                options.AddJobListener<MerchRequestJobListener>();
+#endif
+            });
+
+            services.AddQuartzServer(options => options.WaitForJobsToComplete = true);
 
             return services;
         }
@@ -35,7 +56,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IMerchPackRepository, MerchPackRepository>();
             services.AddScoped<IMerchRequestRepository, MerchRequestRepository>();
-            
+
             return services;
         }
     }
