@@ -3,7 +3,7 @@ using MediatR;
 
 namespace OzonEdu.MerchandiseService.Infrastructure.Commands.CreateMerchRequest
 {
-    public class CreateMerchRequestCommand : IRequest<int>
+    public sealed class CreateMerchRequestCommand : IRequest<int>
     {
         public long EmployeeId { get; set; }
         public int MerchPackTypeId { get; set; }

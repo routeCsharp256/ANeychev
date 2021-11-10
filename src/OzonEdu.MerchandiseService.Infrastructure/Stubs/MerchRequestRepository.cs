@@ -6,7 +6,7 @@ using OzonEdu.MerchandiseService.Domain.Contracts;
 
 namespace OzonEdu.MerchandiseService.Infrastructure.Stubs
 {
-    public class MerchRequestRepository : IMerchRequestRepository
+    public sealed class MerchRequestRepository : IMerchRequestRepository
     {
         public IUnitOfWork UnitOfWork { get; }
 

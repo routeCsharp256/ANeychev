@@ -6,7 +6,7 @@ using OzonEdu.MerchandiseService.Domain.Contracts;
 
 namespace OzonEdu.MerchandiseService.Infrastructure.Stubs
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public sealed class EmployeeRepository : IEmployeeRepository
     {
         public IUnitOfWork UnitOfWork { get; }
         

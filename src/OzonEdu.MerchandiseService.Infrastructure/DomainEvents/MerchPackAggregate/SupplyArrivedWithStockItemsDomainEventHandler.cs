@@ -5,9 +5,11 @@ using OzonEdu.MerchandiseService.Domain.Events.MerchPackAggregate;
 
 namespace OzonEdu.MerchandiseService.Infrastructure.DomainEvents.MerchPackAggregate
 {
-    public class SupplyArrivedWithStockItemsDomainEventHandler : INotificationHandler<SupplyArrivedWithStockItemsDomainEvent>
+    public sealed class SupplyArrivedWithStockItemsDomainEventHandler
+        : INotificationHandler<SupplyArrivedWithStockItemsDomainEvent>
     {
-        public async Task Handle(SupplyArrivedWithStockItemsDomainEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(SupplyArrivedWithStockItemsDomainEvent notification,
+            CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }

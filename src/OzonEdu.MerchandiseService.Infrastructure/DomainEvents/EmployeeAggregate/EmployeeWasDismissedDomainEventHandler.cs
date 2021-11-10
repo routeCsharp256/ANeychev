@@ -8,7 +8,7 @@ using OzonEdu.MerchandiseService.Domain.Events.EmployeeAggregate;
 
 namespace OzonEdu.MerchandiseService.Infrastructure.DomainEvents.EmployeeAggregate
 {
-    public class EmployeeWasDismissedDomainEventHandler : INotificationHandler<EmployeeWasDismissedDomainEvent>
+    public sealed class EmployeeWasDismissedDomainEventHandler : INotificationHandler<EmployeeWasDismissedDomainEvent>
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMerchPackRepository _merchPackRepository;
@@ -17,10 +17,11 @@ namespace OzonEdu.MerchandiseService.Infrastructure.DomainEvents.EmployeeAggrega
             IMerchPackRepository merchPackRepository)
         {
             _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
-            _merchPackRepository = merchPackRepository ?? throw new ArgumentNullException(nameof(merchPackRepository ));
+            _merchPackRepository = merchPackRepository ?? throw new ArgumentNullException(nameof(merchPackRepository));
         }
 
-        public async Task Handle(EmployeeWasDismissedDomainEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(EmployeeWasDismissedDomainEvent notification,
+            CancellationToken cancellationToken = default)
         {
             // TODO Аннулировать все не завершенные заявки уволенного сотрудника
             throw new System.NotImplementedException();

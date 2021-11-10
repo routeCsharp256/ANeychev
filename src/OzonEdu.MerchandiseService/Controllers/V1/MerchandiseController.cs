@@ -39,7 +39,7 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
         [HttpGet]
         [Route("{employeeId:long}/{merchPackTypeId:int}")]
         public async Task<ActionResult<int>> GetMerchPack(long employeeId, int merchPackTypeId,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             var query = new CreateMerchRequestCommand
             {
@@ -60,7 +60,7 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
         /// <returns></returns>
         [HttpGet("{employeeId:long}")]
         public async Task<ActionResult<GetInfoResponse>> GetInfoAboutMerchPacks(long employeeId,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             var getInfoAboutGiveOutMerchPacksForEmployeeQuery = new GetInfoAboutGiveOutMerchPacksForEmployeeQuery
             {
