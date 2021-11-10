@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
@@ -21,7 +22,13 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Stubs
             throw new System.NotImplementedException();
         }
 
-        public async Task<MerchRequest> FindByIdAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<MerchRequest> FindByIdAsync(long id, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task<List<MerchRequest>> GetByEmployeeIdAsync(long employeeId,
+            CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }
