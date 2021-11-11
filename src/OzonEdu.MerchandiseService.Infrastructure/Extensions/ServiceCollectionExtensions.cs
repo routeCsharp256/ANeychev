@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
+using OzonEdu.MerchandiseService.HttpClients.EmployeeService.Interfaces;
+using OzonEdu.MerchandiseService.HttpClients.StockApiService.Interfaces;
+using OzonEdu.MerchandiseService.HttpClients.Stubs;
 using OzonEdu.MerchandiseService.Infrastructure.Jobs;
 using OzonEdu.MerchandiseService.Infrastructure.Stubs;
 using OzonEdu.MerchandiseService.Infrastructure.Workers;
@@ -42,6 +45,10 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
             });
 
             services.AddQuartzServer(options => options.WaitForJobsToComplete = true);
+            
+            // === Stubs
+            services.AddScoped<IEmployeeHttpClient, EmployeeHttpClientStub>();
+            services.AddScoped<IStockApiHttpClient, StockApiHttpClientStub>();
 
             return services;
         }
