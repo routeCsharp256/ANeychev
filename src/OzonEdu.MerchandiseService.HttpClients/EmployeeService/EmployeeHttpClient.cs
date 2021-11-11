@@ -16,7 +16,7 @@ namespace OzonEdu.MerchandiseService.HttpClients.EmployeeService
             _httpClient = httpClient;
         }
 
-        public async Task<List<EmployeeItemResponse>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<List<EmployeeItemResponse>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             using var response = await _httpClient.GetAsync("/api/employees/getall", cancellationToken);
             var body = await response.Content.ReadAsStringAsync(cancellationToken);

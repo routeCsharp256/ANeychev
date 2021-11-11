@@ -7,6 +7,6 @@ namespace OzonEdu.MerchandiseService.HttpClients.EmployeeService.Interfaces
 {
     public interface IEmployeeHttpClient
     {
-        Task<List<EmployeeItemResponse>> GetAll(CancellationToken cancellationToken = default);
+        Task<List<EmployeeItemResponse>> GetAllAsync(CancellationToken cancellationToken = default);
     }
 }

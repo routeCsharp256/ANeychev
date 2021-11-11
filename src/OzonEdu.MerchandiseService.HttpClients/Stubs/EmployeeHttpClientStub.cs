@@ -28,8 +28,8 @@ namespace OzonEdu.MerchandiseService.HttpClients.Stubs
             };
         }
 
-        public Task<List<EmployeeItemResponse>> GetAll(CancellationToken cancellationToken = default) =>
-            Task.FromResult(_employees);
+        public async Task<List<EmployeeItemResponse>> GetAllAsync(CancellationToken cancellationToken = default) =>
+            await Task.FromResult(_employees);
 
     }
 }
