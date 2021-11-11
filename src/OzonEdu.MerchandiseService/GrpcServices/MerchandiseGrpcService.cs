@@ -69,12 +69,9 @@ namespace OzonEdu.MerchandiseService.GrpcServices
                 MerchPackTypeId = request.MerchPackTypeId
             };
 
-            var result = await _mediator.Send(query, context.CancellationToken);
+            await _mediator.Send(query, context.CancellationToken);
 
-            return new GiveOutResponse
-            {
-                MerchRequestStatusId = result
-            };
+            return new GiveOutResponse();
         }
     }
 }
