@@ -9,6 +9,8 @@ using OzonEdu.MerchandiseService.HttpClients.EmployeeService.Interfaces;
 using OzonEdu.MerchandiseService.HttpClients.StockApiService.Interfaces;
 using OzonEdu.MerchandiseService.HttpClients.Stubs;
 using OzonEdu.MerchandiseService.Infrastructure.Jobs;
+using OzonEdu.MerchandiseService.Infrastructure.Services;
+using OzonEdu.MerchandiseService.Infrastructure.Services.Interfaces;
 using OzonEdu.MerchandiseService.Infrastructure.Stubs;
 using OzonEdu.MerchandiseService.Infrastructure.Workers;
 using OzonEdu.MerchandiseService.Infrastructure.Workers.Interfaces;
@@ -45,6 +47,8 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
             });
 
             services.AddQuartzServer(options => options.WaitForJobsToComplete = true);
+            
+            services.AddScoped<IApplicationService, ApplicationService>();
             
             // === Stubs
             services.AddScoped<IEmployeeHttpClient, EmployeeHttpClientStub>();
