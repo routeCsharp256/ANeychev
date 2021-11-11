@@ -27,15 +27,27 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
         }
 
         /// <summary>
-        ///     Тестовый запуск job AutoGenerateMerckRequest
+        ///     Тестовый запуск AutoGenerateMerckRequest
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
-        public async Task<IActionResult> StartAutoGenerateMerckRequest(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> AutoGenerateMerckRequest(CancellationToken cancellationToken = default)
         {
-            await _merchRequestWorker.AutoGenerateMerckRequest(cancellationToken);
+            await _merchRequestWorker.AutoGenerateMerckRequests(cancellationToken);
+            return Ok();
+        }
+
+        /// <summary>
+        ///     Тестовый запуск TryGiveOutMerchPacks
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> TryGiveOutMerchPacks(CancellationToken cancellationToken = default)
+        {
+            await _merchRequestWorker.TryGiveOutMerchPacks(cancellationToken);
             return Ok();
         }
     }

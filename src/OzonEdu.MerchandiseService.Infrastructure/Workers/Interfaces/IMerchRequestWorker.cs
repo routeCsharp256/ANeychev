@@ -5,6 +5,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Workers.Interfaces
 {
     public interface IMerchRequestWorker
     {
-        Task AutoGenerateMerckRequest(CancellationToken cancellationToken = default);
+        Task AutoGenerateMerckRequests(CancellationToken cancellationToken = default);
+        Task TryGiveOutMerchPacks(CancellationToken cancellationToken = default);
     }
 }

@@ -13,7 +13,10 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Jobs
             _merchRequestWorker = merchRequestWorker ?? throw new ArgumentNullException(nameof(merchRequestWorker));
 
 
-        public async Task Execute(IJobExecutionContext context) =>
-            await _merchRequestWorker.AutoGenerateMerckRequest(context.CancellationToken);
+        public async Task Execute(IJobExecutionContext context)
+        {
+            await _merchRequestWorker.AutoGenerateMerckRequests(context.CancellationToken);
+            await _merchRequestWorker.TryGiveOutMerchPacks(context.CancellationToken);
+        }
     }
 }
