@@ -18,7 +18,6 @@ message GiveOutRequest
 
 message GiveOutResponse
 {
-  int32 merch_request_status_id = 1;
 }
 
 message GetInfoRequest
