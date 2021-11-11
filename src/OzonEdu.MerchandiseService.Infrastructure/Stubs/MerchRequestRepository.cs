@@ -22,12 +22,17 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Stubs
             throw new System.NotImplementedException();
         }
 
+        public async Task<IEnumerable<MerchRequest>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task<MerchRequest> FindByIdAsync(long id, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<List<MerchRequest>> GetByEmployeeIdAsync(long employeeId,
+        public async Task<IEnumerable<MerchRequest>> GetByEmployeeIdAsync(long employeeId,
             CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
