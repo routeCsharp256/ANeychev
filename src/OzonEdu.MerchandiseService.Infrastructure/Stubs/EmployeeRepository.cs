@@ -20,7 +20,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Stubs
             throw new System.NotImplementedException();
         }
 
-        public async Task<Employee> FindByIdAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<Employee> FindByIdAsync(long id, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }

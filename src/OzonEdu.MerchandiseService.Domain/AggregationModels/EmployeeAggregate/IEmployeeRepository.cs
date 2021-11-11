@@ -13,7 +13,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
         /// <param name="id">Идентификатор сотрудника</param>
         /// <param name="cancellationToken">Токен для отмены операции</param>
         /// <returns>Сотрудник</returns>
-        Task<Employee> FindByIdAsync(int id, CancellationToken cancellationToken =default);
+        Task<Employee> FindByIdAsync(long id, CancellationToken cancellationToken =default);
 
         /// <summary>
         /// Найти сотрудника по электронной почте
