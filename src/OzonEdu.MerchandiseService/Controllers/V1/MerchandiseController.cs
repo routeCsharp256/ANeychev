@@ -49,7 +49,7 @@ namespace OzonEdu.MerchandiseService.Controllers.V1
 
             var result = await _mediator.Send(query, cancellationToken);
 
-            return result;
+            return Ok(result);
         }
 
         /// <summary>
