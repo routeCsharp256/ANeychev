@@ -5,7 +5,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
     /// <summary>
     /// Статусы заявки на выдачу мерча сотруднику
     /// </summary>
-    public class RequestStatus : Enumeration
+    public sealed class RequestStatus : Enumeration
     {
         /// <summary>
         /// Черновая заявка

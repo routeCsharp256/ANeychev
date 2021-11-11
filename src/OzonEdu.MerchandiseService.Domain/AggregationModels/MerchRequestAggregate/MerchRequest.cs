@@ -13,6 +13,11 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
     public sealed class MerchRequest : Entity, IAggregationRoot
     {
         /// <summary>
+        /// Дата завершения заявки
+        /// </summary>
+        private DateTime _dateOfCompleted;
+
+        /// <summary>
         /// Идентификатор заявки на выдачу мерча
         /// </summary>
         public RequestNumber RequestNumber { get; }
@@ -21,6 +26,11 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// Статус заявки на выдачу мерча
         /// </summary>
         public RequestStatus Status { get; private set; }
+
+        /// <summary>
+        /// Тип набора товаров мерча
+        /// </summary>
+        public MerchPackType Type { get; }
 
         /// <summary>
         /// Идентификатор сотрудника
@@ -115,23 +125,35 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         public void Cancel()
         {
             if (!Equals(Status, RequestStatus.InProgress)) throw new Exception("Incorrect request status");
-            
+
             Status = RequestStatus.Canceled;
-            var merchRequestWasCanceledDomainEvent = new MerchRequestWasCanceledDomainEvent();
-            AddDomainEvent(merchRequestWasCanceledDomainEvent);
         }
 
         /// <summary>
         /// Завершить работу по заявке
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public void Complete()
+        public void Complete(DateTime date)
         {
             if (!Equals(Status, RequestStatus.InProgress)) throw new Exception("Incorrect request status");
 
             Status = RequestStatus.Done;
+            _dateOfCompleted = date;
             var merchRequestWasDoneDomainEvent = new MerchRequestWasDoneDomainEvent();
             AddDomainEvent(merchRequestWasDoneDomainEvent);
+        }
+
+        /// <summary>
+        /// Возвращает срок выдачи заявки
+        /// </summary>
+        /// <param name="date">Дата относительно которой проверяется срок выдачи заявки</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public TimeSpan IsExpiredDateOfGiveOut(DateTime date)
+        {
+            if (!Equals(Status, RequestStatus.InProgress)) throw new Exception("Incorrect request status");
+            if (_dateOfCompleted > date) throw new ArgumentException("Incorrect date");
+            return _dateOfCompleted - date;
         }
     }
 }

@@ -9,16 +9,13 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
         private readonly DateTime _value;
         public DateTime Value => _value;
 
-        public HiringDate(DateTime value)
-        {
-            _value = value;
-            // Todo добавить проверку на "завтра"
-        }
+        public HiringDate(DateTime value) =>
+            _value = DateTime.Now >= value ? value : throw new ArgumentException(nameof(value));
 
         public HiringDate(string value)
         {
             if (DateTime.TryParse(value, out _value)) throw new ArgumentException();
-            // Todo добавить проверку на "завтра"
+            if (DateTime.Now <= _value) throw new ArgumentException(nameof(value));
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

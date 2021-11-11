@@ -65,7 +65,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
                     var employeeFinishedProbationPeriodDomainEvent = new EmployeeFinishedProbationPeriodDomainEvent();
                     AddDomainEvent(employeeFinishedProbationPeriodDomainEvent);
                     break;
-                case 60: // TODO Вынести стаж ветерана в файл настроек сервиса
+                case 60:
                     var employeeBecameVeteranDomainEvent = new EmployeeBecameVeteranDomainEvent();
                     AddDomainEvent(employeeBecameVeteranDomainEvent);
                     break;

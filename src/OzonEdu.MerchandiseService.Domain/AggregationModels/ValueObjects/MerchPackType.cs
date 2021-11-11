@@ -1,7 +1,7 @@
 using CSharpCourse.Core.Lib.Enums;
 using OzonEdu.MerchandiseService.Domain.Models;
 
-namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate
+namespace OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects
 {
     public sealed class MerchPackType : Enumeration
     {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects;
 using OzonEdu.MerchandiseService.Domain.Models;
 
 namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate

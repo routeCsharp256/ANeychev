@@ -39,11 +39,6 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate
             if (Quantity.Value < valueToGiveOut)
                 throw new NotEnoughItemsException("Not enough items");
             Quantity = new Quantity(this.Quantity.Value - valueToGiveOut);
-
-            if (Quantity.Value != 0) return;
-            
-            var orderStartedDomainEvent = new ReachedMinimumMerchItemsNumberDomainEvent(Sku);
-            AddDomainEvent(orderStartedDomainEvent);
         }
     }
 }
