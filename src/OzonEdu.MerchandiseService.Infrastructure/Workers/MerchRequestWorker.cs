@@ -40,7 +40,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Workers
             foreach (var externalEmployee in externalEmployees)
             {
                 var employee =
-                    await _employeeRepository.FindByEmailAsync(new Email(externalEmployee.email), cancellationToken);
+                    await _employeeRepository.FindByEmailAsync(Email.Create(externalEmployee.email), cancellationToken);
                 if (employee is null)
                 {
                     var createEmployee = new Employee(new EmployeeFirstName(externalEmployee.firstName),
@@ -48,7 +48,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Workers
                         new EmployeeLastName(externalEmployee.lastName),
                         new BirthDay(externalEmployee.birthDay),
                         new HiringDate(externalEmployee.hiringDate),
-                        new Email(externalEmployee.email));
+                        Email.Create(externalEmployee.email));
                     await _employeeRepository.CreateAsync(createEmployee, cancellationToken);
                     await _employeeRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
                     employee = await _employeeRepository.FindByIdAsync(createEmployee.Id, cancellationToken);

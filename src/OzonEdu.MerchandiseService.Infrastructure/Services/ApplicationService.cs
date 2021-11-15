@@ -48,7 +48,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Services
                 new EmployeeLastName(externalEmployee.lastName),
                 new BirthDay(externalEmployee.birthDay),
                 new HiringDate(externalEmployee.hiringDate),
-                new Email(externalEmployee.email));
+                Email.Create(externalEmployee.email));
             await _employeeRepository.CreateAsync(createEmployee, cancellationToken);
             await _employeeRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
             employee = await _employeeRepository.FindByIdAsync(createEmployee.Id, cancellationToken);
