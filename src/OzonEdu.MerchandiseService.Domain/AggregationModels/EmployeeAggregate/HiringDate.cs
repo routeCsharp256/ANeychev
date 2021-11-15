@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using OzonEdu.MerchandiseService.Domain.Exceptions.EmployeeAggregate;
 using OzonEdu.MerchandiseService.Domain.Models;
 
 namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
@@ -10,13 +11,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
         public DateTime Value => _value;
 
         public HiringDate(DateTime value) =>
-            _value = DateTime.Now >= value ? value : throw new ArgumentException(nameof(value));
-
-        public HiringDate(string value)
-        {
-            if (DateTime.TryParse(value, out _value)) throw new ArgumentException();
-            if (DateTime.Now <= _value) throw new ArgumentException(nameof(value));
-        }
+            _value = DateTime.Now >= value ? value : throw new HiringDateException(nameof(value));
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

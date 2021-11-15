@@ -1,29 +1,23 @@
 using System;
 using System.Collections.Generic;
+using OzonEdu.MerchandiseService.Domain.Exceptions.EmployeeAggregate;
 using OzonEdu.MerchandiseService.Domain.Models;
 
 namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
 {
     public sealed class BirthDay : ValueObject
     {
-        private readonly DateTime _value;
-        public DateTime Value => _value;
+        public DateTime Value { get; }
 
         public BirthDay(DateTime value)
         {
-            if (DateTime.Now < value) throw new ArgumentException(nameof(BirthDay));
-            _value = value;
-        }
-        
-        public BirthDay(string value)
-        {
-            if (DateTime.TryParse(value, out _value)) throw new ArgumentException(nameof(value));
-            if (DateTime.Now < _value) throw new ArgumentException(nameof(value));
+            if (DateTime.Today <= value) throw new BirthDayException(nameof(BirthDay));
+            Value = value;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return _value;
+            yield return Value;
         }
     }
 }

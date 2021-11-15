@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using OzonEdu.MerchandiseService.Domain.Exceptions.EmployeeAggregate;
 using OzonEdu.MerchandiseService.Domain.Models;
 
 namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
@@ -10,7 +10,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
         
         public EmployeeFirstName(string value)
         {
-            Value = !string.IsNullOrEmpty(value) ? value : throw new ArgumentException(nameof(EmployeeFirstName));
+            Value = !string.IsNullOrEmpty(value) ? value : throw new EmployeeFirstNameException(nameof(EmployeeFirstName));
         }
         
         protected override IEnumerable<object> GetEqualityComponents()
