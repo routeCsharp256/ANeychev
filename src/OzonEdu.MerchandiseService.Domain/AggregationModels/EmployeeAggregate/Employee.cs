@@ -47,7 +47,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
             var employeeWasDismissedDomainEvent = new EmployeeWasDismissedDomainEvent();
             AddDomainEvent(employeeWasDismissedDomainEvent);
         }
-        
+
         /// <summary>
         /// Проверить стажа сотрудника на достижение определённого срока
         /// </summary>
@@ -57,17 +57,19 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
         {
             if (HiringDate.Value.CompareTo(date) > 0) throw new ArgumentException(nameof(date));
             if (IsDismissed) throw new EmployeeIsDismissedException("Employee was dismissed");
-            switch (date.Month - HiringDate.Value.Month)
+            var calcWorkExperience =
+                (date.Year * 12 + date.Month) - (HiringDate.Value.Year * 12 + HiringDate.Value.Month);
+            switch (calcWorkExperience)
             {
                 case 0:
                     var employeeWasHiredDomainEvent = new EmployeeWasHiredDomainEvent();
                     AddDomainEvent(employeeWasHiredDomainEvent);
                     break;
-                case 3:
+                case 4:
                     var employeeFinishedProbationPeriodDomainEvent = new EmployeeFinishedProbationPeriodDomainEvent();
                     AddDomainEvent(employeeFinishedProbationPeriodDomainEvent);
                     break;
-                case 60:
+                case 61:
                     var employeeBecameVeteranDomainEvent = new EmployeeBecameVeteranDomainEvent();
                     AddDomainEvent(employeeBecameVeteranDomainEvent);
                     break;
