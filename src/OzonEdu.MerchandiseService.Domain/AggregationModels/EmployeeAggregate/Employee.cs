@@ -41,6 +41,8 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate
         /// </summary>
         public void Dismiss()
         {
+            if(IsDismissed) return;
+            
             IsDismissed = true;
             var employeeWasDismissedDomainEvent = new EmployeeWasDismissedDomainEvent();
             AddDomainEvent(employeeWasDismissedDomainEvent);
