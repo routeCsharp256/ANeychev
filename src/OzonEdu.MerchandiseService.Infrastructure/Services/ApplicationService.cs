@@ -80,7 +80,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Services
             CancellationToken cancellationToken = default)
         {
             var merchRequest =
-                new MerchRequest(employee.Id, employee.Email, new List<MerchItem>(merchPack.Items));
+                new MerchRequest(employee.Id, employee.Email,merchPack.Type, new List<MerchItem>(merchPack.Items));
             await _merchRequestRepository.CreateAsync(merchRequest, cancellationToken);
             await _merchRequestRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
             return merchRequest;
