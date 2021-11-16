@@ -6,17 +6,18 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 
 service MerchandiseGrpc {
-  rpc GiveOut (GiveOutRequest) returns (GiveOutResponse);
-  rpc GetInfo (GetInfoRequest) returns (GetInfoResponse);
+  rpc GetMerchPack (GiveOutRequest) returns (GiveOutResponse);
+  rpc GetInfoAboutMerchPacks (GetInfoRequest) returns (GetInfoResponse);
 }
 
 message GiveOutRequest
 {
   int64 employee_id = 1;
+  int32 merch_pack_type_id = 2;
 }
 
 message GiveOutResponse
-{  
+{
 }
 
 message GetInfoRequest

@@ -13,6 +13,7 @@ ProjectSection(SolutionItems) = preProject
 	README.md = README.md
 	Dockerfile = Dockerfile
 	.dockerignore = .dockerignore
+	Bounded Context Canvas merchendise-service.drawio = Bounded Context Canvas merchendise-service.drawio
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{D3C4BC4D-6F9A-4367-8C3C-8D0FA8C6BDBB}"
@@ -32,7 +33,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzonEdu.MerchandiseService.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzonEdu.MerchandiseService.Grpc", "src\OzonEdu.MerchandiseService.Grpc\OzonEdu.MerchandiseService.Grpc.csproj", "{0223AFB1-174C-4CE0-9509-9466DDABF2C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzonEdu.MerchandiseService.HttpClient", "src\OzonEdu.MerchandiseService.HttpClient\OzonEdu.MerchandiseService.HttpClient.csproj", "{3E72F5F2-DFA9-4383-97D7-D8959C5C6C01}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzonEdu.MerchandiseService.HttpClients", "src\OzonEdu.MerchandiseService.HttpClients\OzonEdu.MerchandiseService.HttpClients.csproj", "{3E72F5F2-DFA9-4383-97D7-D8959C5C6C01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzonEdu.MerchandiseService.Domain", "src\OzonEdu.MerchandiseService.Domain\OzonEdu.MerchandiseService.Domain.csproj", "{64F2B213-CB3B-4A87-9774-FDFF6D84E0B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzonEdu.MerchandiseService.Infrastructure", "src\OzonEdu.MerchandiseService.Infrastructure\OzonEdu.MerchandiseService.Infrastructure.csproj", "{549A587E-8E1A-4EE0-8C6A-5782464183E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzonEdu.MerchandiseService.Domain.Tests", "tests\OzonEdu.MerchandiseService.Domain.Tests\OzonEdu.MerchandiseService.Domain.Tests.csproj", "{76B8145D-28F6-4A08-9345-B9F1FC6D4F0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +70,18 @@ Global
 		{3E72F5F2-DFA9-4383-97D7-D8959C5C6C01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E72F5F2-DFA9-4383-97D7-D8959C5C6C01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E72F5F2-DFA9-4383-97D7-D8959C5C6C01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64F2B213-CB3B-4A87-9774-FDFF6D84E0B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64F2B213-CB3B-4A87-9774-FDFF6D84E0B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64F2B213-CB3B-4A87-9774-FDFF6D84E0B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64F2B213-CB3B-4A87-9774-FDFF6D84E0B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{549A587E-8E1A-4EE0-8C6A-5782464183E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{549A587E-8E1A-4EE0-8C6A-5782464183E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{549A587E-8E1A-4EE0-8C6A-5782464183E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{549A587E-8E1A-4EE0-8C6A-5782464183E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76B8145D-28F6-4A08-9345-B9F1FC6D4F0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76B8145D-28F6-4A08-9345-B9F1FC6D4F0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76B8145D-28F6-4A08-9345-B9F1FC6D4F0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76B8145D-28F6-4A08-9345-B9F1FC6D4F0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E314052F-91DE-47C7-ADB1-F1CEAB5107E7} = {560FB320-6628-4E67-9B6C-8004D1D425AF}
@@ -70,5 +89,8 @@ Global
 		{850316E8-E779-466F-ABB2-8CE944F4CC9E} = {560FB320-6628-4E67-9B6C-8004D1D425AF}
 		{0223AFB1-174C-4CE0-9509-9466DDABF2C7} = {560FB320-6628-4E67-9B6C-8004D1D425AF}
 		{3E72F5F2-DFA9-4383-97D7-D8959C5C6C01} = {560FB320-6628-4E67-9B6C-8004D1D425AF}
+		{64F2B213-CB3B-4A87-9774-FDFF6D84E0B8} = {560FB320-6628-4E67-9B6C-8004D1D425AF}
+		{549A587E-8E1A-4EE0-8C6A-5782464183E2} = {560FB320-6628-4E67-9B6C-8004D1D425AF}
+		{76B8145D-28F6-4A08-9345-B9F1FC6D4F0E} = {B4B6BDCC-D970-4FC9-B1C9-37294FA8651B}
 	EndGlobalSection
 EndGlobal
