@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects;
 using OzonEdu.MerchandiseService.Domain.Events.MerchRequestAggregate;
+using OzonEdu.MerchandiseService.Domain.Exceptions;
+using OzonEdu.MerchandiseService.Domain.Exceptions.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.Models;
 
 namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate
@@ -30,7 +32,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// <summary>
         /// Тип набора товаров мерча
         /// </summary>
-        public MerchPackType Type { get; }
+        public MerchPackType Type { get; set; }
 
         /// <summary>
         /// Идентификатор сотрудника
@@ -50,7 +52,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         private List<MerchItem> _items = new();
 
         /// <summary>
-        /// Пустой конструктор
+        /// Конструктор 1
         /// </summary>
         public MerchRequest()
         {
@@ -59,16 +61,20 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         }
 
         /// <summary>
-        /// Конструктор 1
+        /// Конструктор 2
         /// </summary>
         /// <param name="employeeId"></param>
         /// <param name="email"></param>
+        /// <param name="type"></param>
         /// <exception cref="Exception"></exception>
-        public MerchRequest(long employeeId, Email email)
+        public MerchRequest(long employeeId, 
+            Email email, 
+            MerchPackType type)
             : this()
         {
-            EmployeeId = employeeId;
-            Email = email;
+            EmployeeId = employeeId != 0 ? employeeId : throw new ArgumentException("Employee id must not equal zero");
+            Email = email ?? throw new ArgumentNullException(nameof(email));
+            Type = type ?? throw new ArgumentNullException(nameof(type));
             Status = RequestStatus.Created;
         }
 
@@ -77,14 +83,18 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// </summary>
         /// <param name="employeeId"></param>
         /// <param name="email"></param>
+        /// <param name="type"></param>
         /// <param name="items"></param>
         public MerchRequest(long employeeId,
             Email email,
+            MerchPackType type,
             List<MerchItem> items)
-            : this(employeeId, email)
+            : this(employeeId, email, type)
         {
-            Status = RequestStatus.InProgress;
+            if (items is null) throw new ArgumentNullException(nameof(items));
+            if (items.Count == 0) throw new ListMerchItemsCountZeroException(nameof(items));
             _items = items;
+            Status = RequestStatus.InProgress;
         }
 
         /// <summary>
@@ -95,25 +105,24 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// <exception cref="Exception"></exception>
         public void Create(long employeeId, Email email)
         {
-            if (!Equals(Status, RequestStatus.Draft))
-            {
-                throw new Exception("Incorrect request status");
-            }
-
-            EmployeeId = employeeId;
-            Email = email ?? throw new Exception("Email should not be null");
+            if (!Equals(Status, RequestStatus.Draft)) throw new StatusRequestException("Incorrect request status");
+            EmployeeId = employeeId != 0 ? employeeId : throw new ArgumentException("Employee id must not equal zero");
+            Email = email ?? throw new ArgumentNullException(nameof(email));
             Status = RequestStatus.Created;
         }
 
         /// <summary>
         /// Взять заявку на выдачу мерча в работу
         /// </summary>
+        /// <param name="type"></param>
         /// <param name="items"></param>
         /// <exception cref="Exception"></exception>
-        public void StartWork(List<MerchItem> items)
+        public void StartWork(MerchPackType type, List<MerchItem> items)
         {
-            if (!Equals(Status, RequestStatus.Created)) throw new Exception("Incorrect request status");
-
+            if (!Equals(Status, RequestStatus.Created)) throw new StatusRequestException("Incorrect request status");
+            Type = type ?? throw new ArgumentNullException(nameof(type));
+            if (items is null) throw new ArgumentNullException(nameof(items));
+            if (items.Count == 0) throw new ListMerchItemsCountZeroException(nameof(items));
             _items = items;
             Status = RequestStatus.InProgress;
         }
@@ -124,7 +133,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// <exception cref="Exception"></exception>
         public void Cancel()
         {
-            if (!Equals(Status, RequestStatus.InProgress)) throw new Exception("Incorrect request status");
+            if (!Equals(Status, RequestStatus.InProgress)) throw new StatusRequestException("Incorrect request status");
 
             Status = RequestStatus.Canceled;
         }
@@ -135,7 +144,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// <exception cref="Exception"></exception>
         public void Complete(DateTime date)
         {
-            if (!Equals(Status, RequestStatus.InProgress)) throw new Exception("Incorrect request status");
+            if (!Equals(Status, RequestStatus.InProgress)) throw new StatusRequestException("Incorrect request status");
 
             Status = RequestStatus.Done;
             _dateOfCompleted = date;
@@ -151,7 +160,7 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
         /// <exception cref="Exception"></exception>
         public TimeSpan IsExpiredDateOfGiveOut(DateTime date)
         {
-            if (!Equals(Status, RequestStatus.InProgress)) throw new Exception("Incorrect request status");
+            if (!Equals(Status, RequestStatus.InProgress)) throw new StatusRequestException("Incorrect request status");
             if (_dateOfCompleted > date) throw new ArgumentException("Incorrect date");
             return _dateOfCompleted - date;
         }
