@@ -1,6 +1,6 @@
 using System;
 
-namespace OzonEdu.MerchandiseService.Domain.Exceptions.MerchPackAggregate
+namespace OzonEdu.MerchandiseService.Domain.Exceptions
 {
     public class ListMerchItemsCountZeroException : Exception
     {
