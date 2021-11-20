@@ -17,8 +17,6 @@ ProjectSection(SolutionItems) = preProject
 	entrypoint.sh = entrypoint.sh
 EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".o3", ".o3", "{E7688A24-84C3-4EAE-AB65-D6AFCB99F6A3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzonEdu.MerchandiseService", "src\OzonEdu.MerchandiseService\OzonEdu.MerchandiseService.csproj", "{E314052F-91DE-47C7-ADB1-F1CEAB5107E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzonEdu.Infrastructure", "src\OzonEdu.Infrastructure\OzonEdu.Infrastructure.csproj", "{2C32150D-4FC8-459E-9D64-1FB54152FEFC}"
