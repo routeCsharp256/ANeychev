@@ -19,6 +19,7 @@ namespace OzonEdu.MerchandiseService
         {
             services.Configure<DatabaseConnectionOptions>(_configuration.GetSection(nameof(DatabaseConnectionOptions)));
             services.AddInfrastructureServices(_configuration);
+            services.AddDatabaseComponents();
             services.AddInfrastructureRepositories();
             services.AddGrpc();
         }
