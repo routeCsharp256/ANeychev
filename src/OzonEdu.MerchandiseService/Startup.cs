@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OzonEdu.MerchandiseService.GrpcServices;
+using OzonEdu.MerchandiseService.Infrastructure.Configuration;
 using OzonEdu.MerchandiseService.Infrastructure.Extensions;
 
 namespace OzonEdu.MerchandiseService
@@ -16,6 +17,7 @@ namespace OzonEdu.MerchandiseService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<DatabaseConnectionOptions>(_configuration.GetSection(nameof(DatabaseConnectionOptions)));
             services.AddInfrastructureServices(_configuration);
             services.AddInfrastructureRepositories();
             services.AddGrpc();
