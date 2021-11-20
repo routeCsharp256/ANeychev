@@ -7,6 +7,7 @@ using OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects;
+using OzonEdu.MerchandiseService.Domain.Contracts;
 using OzonEdu.MerchandiseService.HttpClients.EmployeeService.Interfaces;
 using OzonEdu.MerchandiseService.HttpClients.StockApiService.Interfaces;
 using OzonEdu.MerchandiseService.Infrastructure.Services.Interfaces;
@@ -20,12 +21,14 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Services
         private readonly IMerchPackRepository _merchPackRepository;
         private readonly IEmployeeHttpClient _employeeHttpClient;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public ApplicationService(IStockApiHttpClient stockApiHttpClient,
             IMerchRequestRepository merchRequestRepository,
             IMerchPackRepository merchPackRepository, 
             IEmployeeHttpClient employeeHttpClient, 
-            IEmployeeRepository employeeRepository)
+            IEmployeeRepository employeeRepository, 
+            IUnitOfWork unitOfWork)
         {
             _stockApiHttpClient = stockApiHttpClient ?? throw new ArgumentNullException(nameof(stockApiHttpClient));
             _merchRequestRepository =
@@ -33,6 +36,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Services
             _merchPackRepository = merchPackRepository ?? throw new ArgumentNullException(nameof(merchPackRepository));
             _employeeHttpClient = employeeHttpClient ?? throw new ArgumentNullException(nameof(employeeHttpClient));
             _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public async Task<Employee> GetEmployeeAsync(long employeeId, CancellationToken cancellationToken = default)
@@ -49,8 +53,9 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Services
                 new BirthDay(externalEmployee.birthDay),
                 new HiringDate(externalEmployee.hiringDate),
                 Email.Create(externalEmployee.email));
+            await _unitOfWork.StartTransaction(cancellationToken);
             await _employeeRepository.CreateAsync(createEmployee, cancellationToken);
-            await _employeeRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             employee = await _employeeRepository.FindByIdAsync(createEmployee.Id, cancellationToken);
 
             return employee;
@@ -81,8 +86,9 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Services
         {
             var merchRequest =
                 new MerchRequest(employee.Id, employee.Email,merchPack.Type, new List<MerchItem>(merchPack.Items));
+            await _unitOfWork.StartTransaction(cancellationToken);
             await _merchRequestRepository.CreateAsync(merchRequest, cancellationToken);
-            await _merchRequestRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return merchRequest;
         }
 
@@ -104,8 +110,9 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Services
                 await _stockApiHttpClient.GiveOut(merchItem.Sku.Value, merchItem.Quantity.Value, cancellationToken);
 
             merchRequest.Complete(DateTime.Today);
+            await _unitOfWork.StartTransaction(cancellationToken);
             await _merchRequestRepository.UpdateAsync(merchRequest, cancellationToken);
-            await _merchRequestRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

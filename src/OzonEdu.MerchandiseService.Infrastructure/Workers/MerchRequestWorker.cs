@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects;
+using OzonEdu.MerchandiseService.Domain.Contracts;
 using OzonEdu.MerchandiseService.HttpClients.EmployeeService.Interfaces;
 using OzonEdu.MerchandiseService.Infrastructure.Services.Interfaces;
 using OzonEdu.MerchandiseService.Infrastructure.Workers.Interfaces;
@@ -16,13 +17,15 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Workers
         private readonly IMerchRequestRepository _merchRequestRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IApplicationService _applicationService;
+        private readonly IUnitOfWork _unitOfWork;
         // ====
         private readonly IEmployeeHttpClient _employeeHttpClient;
 
         public MerchRequestWorker(IMerchRequestRepository merchRequestRepository,
             IEmployeeRepository employeeRepository,
             IEmployeeHttpClient employeeHttpClient,
-            IApplicationService applicationService)
+            IApplicationService applicationService, 
+            IUnitOfWork unitOfWork)
         {
             _merchRequestRepository =
                 merchRequestRepository ?? throw new ArgumentNullException(nameof(merchRequestRepository));
@@ -30,6 +33,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Workers
             _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
             _employeeHttpClient = employeeHttpClient ?? throw new ArgumentNullException(nameof(employeeHttpClient));
             _applicationService = applicationService ?? throw new ArgumentNullException(nameof(applicationService));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public async Task AutoGenerateMerckRequests(CancellationToken cancellationToken = default)
@@ -49,8 +53,9 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Workers
                         new BirthDay(externalEmployee.birthDay),
                         new HiringDate(externalEmployee.hiringDate),
                         Email.Create(externalEmployee.email));
+                    await _unitOfWork.StartTransaction(cancellationToken);
                     await _employeeRepository.CreateAsync(createEmployee, cancellationToken);
-                    await _employeeRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
                     employee = await _employeeRepository.FindByIdAsync(createEmployee.Id, cancellationToken);
                 }
 
