@@ -11,128 +11,54 @@ namespace OzonEdu.MerchandiseService.Domain.Tests
         [Fact]
         public void SetQuantity_Set_10_Should_Return_10()
         {
-            #region Arrange
-
             const int expectedQuantity = 10;
-
-            #endregion
-
-            #region Act
-
-            var merchItem = new MerchItem(new Sku(1), new Name("test"), new Item(ItemType.Bag),
-                new Quantity(expectedQuantity));
-
-            #endregion
-
-            #region Assert
-
+            var merchItem = new MerchItem(new Item(ItemType.Bag), new Quantity(expectedQuantity));
             Assert.Equal(expectedQuantity, merchItem.Quantity.Value);
-
-            #endregion
         }
 
         [Fact]
         public void SetQuantity_Set_Minus_10_Should_Return_NegativeValueException()
         {
             Assert.Throws<NegativeValueException>(() =>
-                new MerchItem(new Sku(1), new Name("test"), new Item(ItemType.Bag), new Quantity(-10)));
+                new MerchItem(new Item(ItemType.Bag), new Quantity(-10)));
         }
 
         [Fact]
         public void IncreaseQuantity_Set_10_Should_Return_20()
         {
-            #region Arrange
-
-            var merchItem = new MerchItem(new Sku(1), new Name("test"), new Item(ItemType.Bag),
-                new Quantity(10));
-
-            #endregion
-
-            #region Act
-
+            var merchItem = new MerchItem(new Item(ItemType.Bag), new Quantity(10));
             merchItem.IncreaseQuantity(10);
-
-            #endregion
-
-            #region Assert
-
             Assert.Equal(20, merchItem.Quantity.Value);
-
-            #endregion
         }
 
         [Fact]
         public void IncreaseQuantity_Set_Minus_10_Should_Return_NegativeValueException()
         {
-            #region Arrange
-
-            var merchItem = new MerchItem(new Sku(1), new Name("test"), new Item(ItemType.Bag),
-                new Quantity(10));
-
-            #endregion
-
-            #region Act & Assert
-
+            var merchItem = new MerchItem(new Item(ItemType.Bag), new Quantity(10));
             Assert.Throws<NegativeValueException>(() => merchItem.IncreaseQuantity(-10));
-
-            #endregion
         }
 
         [Fact]
         public void GiveOutItems_Set_10_Should_Return_Zero()
         {
-            #region Arrange
-
-            var merchItem = new MerchItem(new Sku(1), new Name("test"), new Item(ItemType.Bag),
-                new Quantity(10));
-
-            #endregion
-
-            #region Act
-
+            var merchItem = new MerchItem(new Item(ItemType.Bag), new Quantity(10));
             merchItem.GiveOutItems(10);
-
-            #endregion
-
-            #region Assert
-
             Assert.Equal(0, merchItem.Quantity.Value);
-
-            #endregion
         }
 
         [Fact]
         public void GiveOutItems_Set_Minus_10_Should_Return_NegativeValueException()
         {
-            #region Arrange
-
-            var merchItem = new MerchItem(new Sku(1), new Name("test"), new Item(ItemType.Bag),
+            var merchItem = new MerchItem(new Item(ItemType.Bag),
                 new Quantity(10));
-
-            #endregion
-
-            #region Act & Assert
-
             Assert.Throws<NegativeValueException>(() => merchItem.GiveOutItems(-10));
-            
-            #endregion
         }
 
         [Fact]
         public void GiveOutItems_Set_20_Should_Return_NotEnoughItemsException()
         {
-            #region Arrange
-
-            var merchItem = new MerchItem(new Sku(1), new Name("test"), new Item(ItemType.Bag),
-                new Quantity(10));
-
-            #endregion
-
-            #region Act & Assert
-
+            var merchItem = new MerchItem(new Item(ItemType.Bag), new Quantity(10));
             Assert.Throws<NotEnoughItemsException>(() => merchItem.GiveOutItems(20));
-            
-            #endregion
         }
     }
 }
