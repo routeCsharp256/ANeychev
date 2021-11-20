@@ -28,10 +28,9 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Handlers.EmployeeAggregate
             CancellationToken cancellationToken = default)
         {
             var result = new List<MerchItem>();
-            var employee = await _applicationService.GetEmployeeAsync(request.EmployeeId, cancellationToken);
 
             var requests =
-                await _merchRequestRepository.GetByEmployeeIdAsync(employee.Id, cancellationToken);
+                await _merchRequestRepository.GetByEmployeeIdAsync(request.EmployeeId, cancellationToken);
             
             if (requests is null) return result;
             

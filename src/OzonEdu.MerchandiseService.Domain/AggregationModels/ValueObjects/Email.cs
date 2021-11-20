@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using OzonEdu.MerchandiseService.Domain.Exceptions.EmployeeAggregate;
+using OzonEdu.MerchandiseService.Domain.Exceptions;
 using OzonEdu.MerchandiseService.Domain.Models;
 
 namespace OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects

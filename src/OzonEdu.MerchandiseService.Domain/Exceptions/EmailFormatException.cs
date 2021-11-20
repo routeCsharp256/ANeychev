@@ -1,6 +1,6 @@
 using System;
 
-namespace OzonEdu.MerchandiseService.Domain.Exceptions.EmployeeAggregate
+namespace OzonEdu.MerchandiseService.Domain.Exceptions
 {
     public class EmailFormatException : Exception
     {

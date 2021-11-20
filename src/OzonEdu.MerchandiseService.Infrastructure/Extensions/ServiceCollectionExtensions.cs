@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
-using OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
 using OzonEdu.MerchandiseService.Domain.Contracts;
@@ -86,7 +85,6 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
         public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services)
         {
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IMerchPackRepository, MerchPackRepository>();
             services.AddScoped<IMerchRequestRepository, MerchRequestRepository>();
 
