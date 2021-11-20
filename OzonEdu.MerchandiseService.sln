@@ -14,6 +14,7 @@ ProjectSection(SolutionItems) = preProject
 	Dockerfile = Dockerfile
 	.dockerignore = .dockerignore
 	Bounded Context Canvas merchendise-service.drawio = Bounded Context Canvas merchendise-service.drawio
+	entrypoint.sh = entrypoint.sh
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{D3C4BC4D-6F9A-4367-8C3C-8D0FA8C6BDBB}"
