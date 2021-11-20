@@ -10,7 +10,7 @@ using Xunit;
 
 namespace OzonEdu.MerchandiseService.Domain.Tests
 {
-    public class MerchRequestTests
+    public sealed class MerchRequestTests
     {
         [Fact]
         public void Create_Set_Status_InProgress_Should_Return_StatusRequestException()

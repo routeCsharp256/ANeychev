@@ -7,7 +7,7 @@ using Xunit;
 
 namespace OzonEdu.MerchandiseService.Domain.Tests
 {
-    public class MerchPackTests
+    public sealed class MerchPackTests
     {
         [Fact]
         public void MerchPack_Init_Should_Return_Valid_MerchPack()

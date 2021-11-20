@@ -7,7 +7,7 @@ using Xunit;
 
 namespace OzonEdu.MerchandiseService.Domain.Tests
 {
-    public class EmployeeTests
+    public sealed class EmployeeTests
     {
         [Fact]
         public void EmployeeWasDismissedDomainEvent_Trigger_Dismiss()

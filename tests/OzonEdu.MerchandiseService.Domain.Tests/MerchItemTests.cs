@@ -6,7 +6,7 @@ using Xunit;
 
 namespace OzonEdu.MerchandiseService.Domain.Tests
 {
-    public class MerchItemTests
+    public sealed class MerchItemTests
     {
         [Fact]
         public void SetQuantity_Set_10_Should_Return_10()
