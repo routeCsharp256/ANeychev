@@ -11,6 +11,7 @@ services:
       - "8080:80"
     environment:
       DatabaseConnectionOptions__ConnectionString: "Host=host.docker.internal;Port=5428;Database=merchandise-service;Username=postgres;Password=merchandiseService;"
+      StockApiGrpcConnectionOptions__ConnectionString: "host.docker.internal:5002"
     depends_on:
       - merchandise-service-db
     restart: unless-stopped
