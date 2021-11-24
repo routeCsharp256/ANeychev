@@ -7,7 +7,6 @@ using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
 using OzonEdu.MerchandiseService.Domain.Contracts;
 using OzonEdu.MerchandiseService.HttpClients.EmployeeService.Interfaces;
-using OzonEdu.MerchandiseService.HttpClients.StockApiService.Interfaces;
 using OzonEdu.MerchandiseService.HttpClients.Stubs;
 using OzonEdu.MerchandiseService.Infrastructure.Jobs;
 using OzonEdu.MerchandiseService.Infrastructure.Repositories.Implementation;
@@ -15,6 +14,7 @@ using OzonEdu.MerchandiseService.Infrastructure.Repositories.Infrastructure;
 using OzonEdu.MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces;
 using OzonEdu.MerchandiseService.Infrastructure.Services;
 using OzonEdu.MerchandiseService.Infrastructure.Services.Interfaces;
+using OzonEdu.MerchandiseService.Infrastructure.Services.Stubs;
 using OzonEdu.MerchandiseService.Infrastructure.Workers;
 using OzonEdu.MerchandiseService.Infrastructure.Workers.Interfaces;
 using Quartz;
@@ -55,9 +55,8 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
 
             // === Stubs
             services.AddScoped<IEmployeeHttpClient, EmployeeHttpClientStub>();
-            services.AddScoped<IStockApiHttpClient, StockApiHttpClientStub>();
-
-            // === Repo
+            services.AddScoped<IStockApiService, StockApiServiceStub>();
+            services.AddScoped<INotificationService, NotificationServiceStub>();
 
             return services;
         }
