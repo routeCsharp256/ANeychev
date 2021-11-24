@@ -85,6 +85,8 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
         public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services)
         {
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+            services.AddScoped<IItemTypeRepository, ItemTypeRepository>();
+            services.AddScoped<IMerchItemRepository, MerchItemRepository>();
             services.AddScoped<IMerchPackRepository, MerchPackRepository>();
             services.AddScoped<IMerchRequestRepository, MerchRequestRepository>();
 
