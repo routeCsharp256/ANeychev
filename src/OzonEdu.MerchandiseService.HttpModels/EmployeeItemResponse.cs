@@ -8,8 +8,8 @@ namespace OzonEdu.MerchandiseService.HttpModels
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string middleName { get; set; }
-        public DateTime birthDay { get; set; }
-        public DateTime hiringDate { get; set; }
+        public DateTimeOffset birthDay { get; set; }
+        public DateTimeOffset hiringDate { get; set; }
         public string email { get; set; }
     }
 }
