@@ -1,3 +1,4 @@
+using OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects;
 using OzonEdu.MerchandiseService.Domain.Exceptions;
 using OzonEdu.MerchandiseService.Domain.Exceptions.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.Models;
@@ -17,19 +18,12 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate
 
         private void SetQuantity(Quantity value)
         {
-            if (value.Value < 0)
-                throw new NegativeValueException($"{nameof(value)} value is negative");
-
             Quantity = value;
         }
 
         public void IncreaseQuantity(int valueToIncrease)
         {
-            if (valueToIncrease < 0)
-            {
-                throw new NegativeValueException($"{nameof(valueToIncrease)} value is negative");
-            }
-
+            if (valueToIncrease < 0) throw new NegativeValueException($"{nameof(valueToIncrease)} value is negative");
             Quantity = new Quantity(Quantity.Value + valueToIncrease);
         }
 

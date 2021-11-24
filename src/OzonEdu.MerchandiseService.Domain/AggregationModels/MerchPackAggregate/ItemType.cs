@@ -1,3 +1,5 @@
+using System;
+using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
 using OzonEdu.MerchandiseService.Domain.Models;
 
 namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate
@@ -37,5 +39,16 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate
         public ItemType(int id, string name) : base(id, name)
         {
         }
+
+        public static ItemType Parse(int id) => id switch
+        {
+            1 => TShirt,
+            2 => Sweatshirt,
+            3 => Notepad,
+            4 => Bag,
+            5 => Pen,
+            6 => Socks,
+            _ => throw new Exception("Unknown type")
+        };
     }
 }

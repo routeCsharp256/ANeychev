@@ -3,7 +3,7 @@ using MediatR;
 
 namespace OzonEdu.MerchandiseService.Domain.Events.MerchRequestAggregate
 {
-    public class MerchRequestWasDoneDomainEvent : INotification
+    public sealed class MerchRequestWasDoneDomainEvent : INotification
     {
         public Guid RequestNumber { get; set; }
     }

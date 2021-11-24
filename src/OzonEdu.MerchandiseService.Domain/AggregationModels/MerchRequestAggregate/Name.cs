@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using OzonEdu.MerchandiseService.Domain.Models;
 
-namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate
+namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate
 {
-    public sealed class Name : ValueObject
+    public class Name : ValueObject
     {
         public string Value { get; }
         

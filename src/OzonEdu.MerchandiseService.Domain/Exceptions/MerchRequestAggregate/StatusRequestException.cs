@@ -1,6 +1,6 @@
 using System;
 
-namespace OzonEdu.MerchandiseService.Domain.Exceptions.MerchPackAggregate
+namespace OzonEdu.MerchandiseService.Domain.Exceptions.MerchRequestAggregate
 {
     public class StatusRequestException : Exception
     {

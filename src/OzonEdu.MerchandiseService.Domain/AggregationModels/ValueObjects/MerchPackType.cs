@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using CSharpCourse.Core.Lib.Enums;
 using OzonEdu.MerchandiseService.Domain.Models;
 
@@ -36,5 +38,16 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects
         public MerchPackType(int id, string name) : base(id, name)
         {
         }
+
+        public static MerchPackType Parse(int id) =>
+            id switch
+            {
+                (int) MerchType.WelcomePack => VeteranPack,
+                (int) MerchType.ConferenceListenerPack => ConferenceListenerPack,
+                (int) MerchType.ConferenceSpeakerPack => ConferenceSpeakerPack,
+                (int) MerchType.ProbationPeriodEndingPack => ProbationPeriodEndingPack,
+                (int) MerchType.VeteranPack => VeteranPack,
+                _ => throw new Exception("Unknown type")
+            };
     }
 }

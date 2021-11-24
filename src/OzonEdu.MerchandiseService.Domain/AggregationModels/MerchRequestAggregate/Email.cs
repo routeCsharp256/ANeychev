@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using OzonEdu.MerchandiseService.Domain.Exceptions;
 using OzonEdu.MerchandiseService.Domain.Models;
 
-namespace OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects
+namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate
 {
     /// <summary>
     /// Электронная почта

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,12 +8,13 @@ namespace OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggreg
 {
     public interface IMerchRequestRepository : IRepository<MerchRequest>
     {
-        Task<IEnumerable<MerchRequest>> GetAllAsync(CancellationToken cancellationToken = default);
-        Task<MerchRequest> FindByIdAsync(long id, CancellationToken cancellationToken = default);
+        Task<MerchRequest> CreateAsync(MerchRequest itemToCreate, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<MerchRequest>> GetByEmployeeIdAsync(long employeeId, CancellationToken cancellationToken = default);
+        Task<MerchRequest> UpdateAsync(MerchRequest itemToUpdate, CancellationToken cancellationToken = default);
 
-        Task<MerchRequest> FindByRequestNumber(RequestNumber requestNumber,
+        Task<IReadOnlyCollection<MerchRequest>> GetAllAsync(CancellationToken cancellationToken = default);
+
+        Task<IReadOnlyCollection<MerchRequest>> FindAsync(Func<MerchRequest, bool> predicate,
             CancellationToken cancellationToken = default);
     }
 }
