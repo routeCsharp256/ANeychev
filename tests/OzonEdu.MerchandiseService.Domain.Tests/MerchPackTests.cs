@@ -12,29 +12,15 @@ namespace OzonEdu.MerchandiseService.Domain.Tests
         [Fact]
         public void MerchPack_Init_Should_Return_Valid_MerchPack()
         {
-            #region Arrange
-
             var merchPackType = MerchPackType.WelcomePack;
             var merchPackItems = new List<MerchItem>
             {
-                new(new Sku(1), new Name("test1"), new Item(ItemType.Bag), new Quantity(10)),
-                new(new Sku(2), new Name("test2"), new Item(ItemType.Notepad), new Quantity(20))
+                new(new Item(ItemType.Bag), new Quantity(10)),
+                new(new Item(ItemType.Notepad), new Quantity(20))
             };
-
-            #endregion
-
-            #region Act
-            
             var merchPack = new MerchPack(merchPackType, merchPackItems);
-
-            #endregion
-
-            #region Act
-            
             Assert.Equal(merchPackType, merchPack.Type);
             Assert.Equal(merchPackItems, merchPack.Items);
-
-            #endregion
         }
 
         [Fact]
@@ -44,8 +30,8 @@ namespace OzonEdu.MerchandiseService.Domain.Tests
                 null,
                 new List<MerchItem>
                 {
-                    new(new Sku(1), new Name("test1"), new Item(ItemType.Bag), new Quantity(10)),
-                    new(new Sku(2), new Name("test2"), new Item(ItemType.Notepad), new Quantity(20))
+                    new(new Item(ItemType.Bag), new Quantity(10)),
+                    new(new Item(ItemType.Notepad), new Quantity(20))
                 }));
         }
 

@@ -5,7 +5,7 @@ using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects;
 using OzonEdu.MerchandiseService.Domain.Exceptions;
-using OzonEdu.MerchandiseService.Domain.Exceptions.MerchPackAggregate;
+using OzonEdu.MerchandiseService.Domain.Exceptions.MerchRequestAggregate;
 using Xunit;
 
 namespace OzonEdu.MerchandiseService.Domain.Tests
@@ -15,42 +15,81 @@ namespace OzonEdu.MerchandiseService.Domain.Tests
         [Fact]
         public void Create_Set_Status_InProgress_Should_Return_StatusRequestException()
         {
-            var merchRequest = new MerchRequest(1, Email.Create("test@test.com"), MerchPackType.VeteranPack);
-
-            Assert.Throws<StatusRequestException>(() => merchRequest.Create(1, Email.Create("test@test.com")));
+            var merchPack = new MerchPack(MerchPackType.VeteranPack, new List<MerchItem>
+            {
+                new(new Item(ItemType.Bag), new Quantity(10))
+            });
+            var merchRequest = new MerchRequest(1, ClothingSize.L, Email.Create("test@test.com"),
+                Email.Create("test@test.com"),
+                merchPack, new List<MerchRequestItem>
+                {
+                    new(new Sku(1), new Name("test"), new Item(ItemType.Bag), new Quantity(10))
+                });
+            Assert.Throws<StatusRequestException>(() =>
+                merchRequest.Create(1, ClothingSize.L, Email.Create("test@test.com"), Email.Create("test@test.com")));
         }
 
         [Fact]
         public void Constructor_EmployeeId_Set_Zero_Should_Return_ArgumentException()
         {
+            var merchPack = new MerchPack(MerchPackType.VeteranPack, new List<MerchItem>
+            {
+                new(new Item(ItemType.Bag), new Quantity(10))
+            });
             Assert.Throws<ArgumentException>(() =>
-                new MerchRequest(0, Email.Create("test@test.com"), MerchPackType.VeteranPack));
+                new MerchRequest(0, ClothingSize.L, Email.Create("test@test.com"), Email.Create("test@test.com"),
+                    merchPack, new List<MerchRequestItem>
+                    {
+                        new(new Sku(1), new Name("test"), new Item(ItemType.Bag), new Quantity(10))
+                    }));
         }
 
         [Fact]
         public void Constructor_Email_Set_Null_Should_Return_ArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new MerchRequest(1, null, MerchPackType.VeteranPack));
+            var merchPack = new MerchPack(MerchPackType.VeteranPack, new List<MerchItem>
+            {
+                new(new Item(ItemType.Bag), new Quantity(10))
+            });
+            Assert.Throws<ArgumentNullException>(() => new MerchRequest(1, ClothingSize.L, null,
+                Email.Create("test@test.com"), merchPack, new List<MerchRequestItem>
+                {
+                    new(new Sku(1), new Name("test"), new Item(ItemType.Bag), new Quantity(10))
+                }));
         }
 
         [Fact]
-        public void Constructor_Type_Set_Null_Should_Return_ArgumentNullException()
+        public void Constructor_MerchPack_Set_Null_Should_Return_ArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new MerchRequest(1, Email.Create("test@test.com"), null));
+            Assert.Throws<ArgumentNullException>(() => new MerchRequest(1, ClothingSize.L,
+                Email.Create("test@test.com"), Email.Create("test@test.com"), null, new List<MerchRequestItem>
+                {
+                    new(new Sku(1), new Name("test"), new Item(ItemType.Bag), new Quantity(10))
+                }));
         }
 
         [Fact]
-        public void Constructor_List_MerchItems_Set_Null_Should_Return_ArgumentNullException()
+        public void Constructor_List_MerchRequestItems_Set_Null_Should_Return_ArgumentNullException()
         {
+            var merchPack = new MerchPack(MerchPackType.VeteranPack, new List<MerchItem>
+            {
+                new(new Item(ItemType.Bag), new Quantity(10))
+            });
             Assert.Throws<ArgumentNullException>(() =>
-                new MerchRequest(1, Email.Create("test@test.com"), MerchPackType.VeteranPack, null));
+                new MerchRequest(1, ClothingSize.L, Email.Create("test@test.com"), Email.Create("test@test.com"),
+                    merchPack, null));
         }
 
         [Fact]
-        public void Constructor_List_MerchItems_Set_Count_Zero_Should_Return_ListMerchItemsCountZeroException()
+        public void Constructor_List_MerchRequestItems_Set_Count_Zero_Should_Return_ListMerchItemsCountZeroException()
         {
+            var merchPack = new MerchPack(MerchPackType.VeteranPack, new List<MerchItem>
+            {
+                new(new Item(ItemType.Bag), new Quantity(10))
+            });
             Assert.Throws<ListMerchItemsCountZeroException>(() =>
-                new MerchRequest(1, Email.Create("test@test.com"), MerchPackType.VeteranPack, new List<MerchItem>()));
+                new MerchRequest(1, ClothingSize.L, Email.Create("test@test.com"), Email.Create("test@test.com"),
+                    merchPack, new List<MerchRequestItem>()));
         }
 
         [Fact]
@@ -58,7 +97,8 @@ namespace OzonEdu.MerchandiseService.Domain.Tests
         {
             var merchRequest = new MerchRequest();
 
-            Assert.Throws<ArgumentException>(() => merchRequest.Create(0, Email.Create("test@test.com")));
+            Assert.Throws<ArgumentException>(() =>
+                merchRequest.Create(0, ClothingSize.L, Email.Create("test@test.com"), Email.Create("test@test.com")));
         }
 
         [Fact]
@@ -66,16 +106,17 @@ namespace OzonEdu.MerchandiseService.Domain.Tests
         {
             var merchRequest = new MerchRequest();
 
-            Assert.Throws<ArgumentNullException>(() => merchRequest.Create(1, null));
+            Assert.Throws<ArgumentNullException>(() =>
+                merchRequest.Create(1, ClothingSize.L, null, Email.Create("test@test.com")));
         }
 
         [Fact]
         public void StarkWork_Type_Set_Null_Should_Return_ArgumentNullException()
         {
             var merchRequest = new MerchRequest();
-            merchRequest.Create(1, Email.Create("test@test.com"));
+            merchRequest.Create(1, ClothingSize.L, Email.Create("test@test.com"), Email.Create("test@test.com"));
 
-            Assert.Throws<ArgumentNullException>(() => merchRequest.StartWork(null, new List<MerchItem>
+            Assert.Throws<ArgumentNullException>(() => merchRequest.StartWork(null, new List<MerchRequestItem>
             {
                 new(new Sku(1), new Name("test"), new Item(ItemType.Bag), new Quantity(10))
             }));
@@ -85,28 +126,41 @@ namespace OzonEdu.MerchandiseService.Domain.Tests
         public void StarkWork_List_MerchItems_Set_Null_Should_Return_ArgumentNullException()
         {
             var merchRequest = new MerchRequest();
-            merchRequest.Create(1, Email.Create("test@test.com"));
+            var merchPack = new MerchPack(MerchPackType.VeteranPack, new List<MerchItem>
+            {
+                new(new Item(ItemType.Bag), new Quantity(10))
+            });
+            merchRequest.Create(1, ClothingSize.L, Email.Create("test@test.com"), Email.Create("test@test.com"));
 
-            Assert.Throws<ArgumentNullException>(() => merchRequest.StartWork(MerchPackType.VeteranPack, null));
+            Assert.Throws<ArgumentNullException>(() => merchRequest.StartWork(merchPack, null));
         }
 
         [Fact]
         public void StarkWork_List_MerchItems_Set_Count_Zero_Should_Return_ListMerchItemsCountZeroException()
         {
             var merchRequest = new MerchRequest();
-            merchRequest.Create(1, Email.Create("test@test.com"));
+            var merchPack = new MerchPack(MerchPackType.VeteranPack, new List<MerchItem>
+            {
+                new(new Item(ItemType.Bag), new Quantity(10))
+            });
 
-            Assert.Throws<ListMerchItemsCountZeroException>(() => merchRequest.StartWork(MerchPackType.VeteranPack,
-                new List<MerchItem>()));
+            merchRequest.Create(1, ClothingSize.L, Email.Create("test@test.com"), Email.Create("test@test.com"));
+
+            Assert.Throws<ListMerchItemsCountZeroException>(() => merchRequest.StartWork(merchPack,
+                new List<MerchRequestItem>()));
         }
 
         [Fact]
         public void StartWork_Set_Status_Draft_Should_Return_StatusRequestException()
         {
             var merchRequest = new MerchRequest();
+            var merchPack = new MerchPack(MerchPackType.VeteranPack, new List<MerchItem>
+            {
+                new(new Item(ItemType.Bag), new Quantity(10))
+            });
 
-            Assert.Throws<StatusRequestException>(() => merchRequest.StartWork(MerchPackType.VeteranPack,
-                new List<MerchItem>
+            Assert.Throws<StatusRequestException>(() => merchRequest.StartWork(merchPack,
+                new List<MerchRequestItem>
                 {
                     new(new Sku(1), new Name("test"), new Item(ItemType.Bag), new Quantity(10))
                 }));
@@ -123,13 +177,17 @@ namespace OzonEdu.MerchandiseService.Domain.Tests
         public void MerchRequestWasDoneDomainEvent_Trigger_Complete()
         {
             var merchRequest = new MerchRequest();
-            merchRequest.Create(1, Email.Create("test@test.com"));
-            merchRequest.StartWork(MerchPackType.VeteranPack, new List<MerchItem>
+            var merchPack = new MerchPack(MerchPackType.VeteranPack, new List<MerchItem>
+            {
+                new(new Item(ItemType.Bag), new Quantity(10))
+            });
+            merchRequest.Create(1, ClothingSize.L, Email.Create("test@test.com"), Email.Create("test@test.com"));
+            merchRequest.StartWork(merchPack, new List<MerchRequestItem>
             {
                 new(new Sku(1), new Name("test"), new Item(ItemType.Bag), new Quantity(10))
             });
-            merchRequest.Complete(DateTime.Today);
-            
+            merchRequest.Complete();
+
             Assert.Equal(
                 @"OzonEdu.MerchandiseService.Domain.Events.MerchRequestAggregate.MerchRequestWasDoneDomainEvent",
                 merchRequest.DomainEvents.ToList()[0].ToString());
@@ -139,27 +197,7 @@ namespace OzonEdu.MerchandiseService.Domain.Tests
         public void Complete_Set_Status_Draft_Should_Return_StatusRequestException()
         {
             var merchRequest = new MerchRequest();
-            Assert.Throws<StatusRequestException>(() => merchRequest.Complete(DateTime.Today));
-        }
-
-        [Fact]
-        public void IsExpiredDateOfGiveOut_Set_Status_Draft_Should_Return_StatusRequestException()
-        {
-            var merchRequest = new MerchRequest();
-            Assert.Throws<StatusRequestException>(() => merchRequest.IsExpiredDateOfGiveOut(DateTime.Today));
-        }
-
-        [Fact]
-        public void IsExpiredDateOfGiveOut_Set_Invalid_Date_Should_Return_ArgumentException()
-        {
-            var merchRequest = new MerchRequest();
-            merchRequest.Create(1, Email.Create("test@test.com"));
-            merchRequest.StartWork(MerchPackType.VeteranPack, new List<MerchItem>
-            {
-                new(new Sku(1), new Name("test"), new Item(ItemType.Bag), new Quantity(10))
-            });
-            merchRequest.Complete(DateTime.Today);
-            Assert.Throws<StatusRequestException>(() => merchRequest.IsExpiredDateOfGiveOut(DateTime.Today.AddDays(-1)));
+            Assert.Throws<StatusRequestException>(() => merchRequest.Complete());
         }
     }
 }
