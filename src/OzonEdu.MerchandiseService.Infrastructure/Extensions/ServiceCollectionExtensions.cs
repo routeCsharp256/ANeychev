@@ -72,6 +72,7 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Extensions
             services.AddScoped<IDbConnectionFactory<NpgsqlConnection>, NpgsqlConnectionFactory>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IChangeTracker, ChangeTracker>();
+            services.AddScoped<IQueryExecutor, QueryExecutor>();
 
             return services;
         }
