@@ -1,6 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
 
@@ -8,15 +9,17 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Services.Interfaces
 {
     public interface IApplicationService
     {
-        Task<Employee> GetEmployeeAsync(long employeeId, CancellationToken cancellationToken = default);
-        Task<MerchPack> GetMerchPackAsync(int merchPackTypeId, CancellationToken cancellationToken = default);
+        Task<MerchPack> GetMerchPackAsync(int merchTypeId, CancellationToken cancellationToken = default);
 
-        Task<bool> CheckRepeatedMerchRequestAsync(Employee employee, MerchPack merchPack,
+        Task<bool> IsNotRepeatedMerchRequestAsync(long employeeId, MerchPack merchPack,
             CancellationToken cancellationToken = default);
 
-        Task<MerchRequest> CreateMerchRequestAsync(Employee employee, MerchPack merchPack,
-            CancellationToken cancellationToken = default);
+        Task<MerchRequest> CreateMerchRequestAsync(long employeeId, ClothingSize clothingSize, Email employeeEmail,
+            Email managerEmail, MerchPack merchPack, CancellationToken cancellationToken = default);
 
         Task TryGiveOutMerchRequestAsync(MerchRequest merchRequest, CancellationToken cancellationToken = default);
+
+        Task<IReadOnlyCollection<MerchRequest>> FindMerchRequestsAsync(Func<MerchRequest, bool> predicate,
+            CancellationToken cancellationToken = default);
     }
 }

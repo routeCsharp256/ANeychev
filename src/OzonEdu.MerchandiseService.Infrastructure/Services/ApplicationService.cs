@@ -3,89 +3,89 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using OzonEdu.MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
+using CSharpCourse.Core.Lib.Enums;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.MerchRequestAggregate;
 using OzonEdu.MerchandiseService.Domain.AggregationModels.ValueObjects;
 using OzonEdu.MerchandiseService.Domain.Contracts;
-using OzonEdu.MerchandiseService.HttpClients.EmployeeService.Interfaces;
-using OzonEdu.MerchandiseService.HttpClients.StockApiService.Interfaces;
+using OzonEdu.MerchandiseService.Infrastructure.Models;
 using OzonEdu.MerchandiseService.Infrastructure.Services.Interfaces;
 
 namespace OzonEdu.MerchandiseService.Infrastructure.Services
 {
-    public sealed class ApplicationService : IApplicationService
+    public sealed class ApplicationService : IApplicationService, IDisposable
     {
-        private readonly IStockApiHttpClient _stockApiHttpClient;
+        private readonly IStockApiService _stockApiService;
         private readonly IMerchRequestRepository _merchRequestRepository;
         private readonly IMerchPackRepository _merchPackRepository;
-        private readonly IEmployeeHttpClient _employeeHttpClient;
-        private readonly IEmployeeRepository _employeeRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly INotificationService _notificationService;
 
-        public ApplicationService(IStockApiHttpClient stockApiHttpClient,
+        public ApplicationService(IStockApiService stockApiService,
             IMerchRequestRepository merchRequestRepository,
-            IMerchPackRepository merchPackRepository, 
-            IEmployeeHttpClient employeeHttpClient, 
-            IEmployeeRepository employeeRepository, 
-            IUnitOfWork unitOfWork)
+            IMerchPackRepository merchPackRepository,
+            IUnitOfWork unitOfWork,
+            INotificationService notificationService)
         {
-            _stockApiHttpClient = stockApiHttpClient ?? throw new ArgumentNullException(nameof(stockApiHttpClient));
+            _stockApiService = stockApiService ?? throw new ArgumentNullException(nameof(stockApiService));
             _merchRequestRepository =
                 merchRequestRepository ?? throw new ArgumentNullException(nameof(merchRequestRepository));
             _merchPackRepository = merchPackRepository ?? throw new ArgumentNullException(nameof(merchPackRepository));
-            _employeeHttpClient = employeeHttpClient ?? throw new ArgumentNullException(nameof(employeeHttpClient));
-            _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
-        public async Task<Employee> GetEmployeeAsync(long employeeId, CancellationToken cancellationToken = default)
-        {
-            var employee = await _employeeRepository.FindByIdAsync(employeeId, cancellationToken);
-            if (employee is not null) return employee;
-            var externalEmployees = await _employeeHttpClient.GetAllAsync(cancellationToken);
-            var externalEmployee = externalEmployees.FirstOrDefault(x => x.id == employeeId);
-            if (externalEmployee is null)
-                throw new Exception($"Employee with id {employeeId} doesn't exist");
-            var createEmployee = new Employee(new EmployeeFirstName(externalEmployee.firstName),
-                new EmployeeMiddleName(externalEmployee.middleName),
-                new EmployeeLastName(externalEmployee.lastName),
-                new BirthDay(externalEmployee.birthDay),
-                new HiringDate(externalEmployee.hiringDate),
-                Email.Create(externalEmployee.email));
-            await _unitOfWork.StartTransaction(cancellationToken);
-            await _employeeRepository.CreateAsync(createEmployee, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-            employee = await _employeeRepository.FindByIdAsync(createEmployee.Id, cancellationToken);
-
-            return employee;
-        }
-
-        public async Task<MerchPack> GetMerchPackAsync(int merchPackTypeId,
+        public async Task<MerchPack> GetMerchPackAsync(int merchTypeId,
             CancellationToken cancellationToken = default)
         {
-            var merchPack = await _merchPackRepository.FindByIdAsync(merchPackTypeId, cancellationToken);
-            if (merchPack is null) throw new Exception($"Merch pack with id {merchPackTypeId} doesn't exist");
+            var type = MerchPackType.Parse(merchTypeId);
+            var merchPack = await _merchPackRepository.FindByTypeAsync(type, cancellationToken);
+            if (merchPack is null) throw new ArgumentNullException(nameof(merchPack));
             return merchPack;
         }
 
-        public async Task<bool> CheckRepeatedMerchRequestAsync(Employee employee, MerchPack merchPack,
+        public async Task<bool> IsNotRepeatedMerchRequestAsync(long employeeId, MerchPack merchPack,
             CancellationToken cancellationToken = default)
         {
-            var repeatMerckPacks = (await _merchRequestRepository.GetByEmployeeIdAsync(employee.Id, cancellationToken)).ToList()
-                .FindAll(x =>
-                    Equals(x.Type, merchPack.Type) &&
-                    Equals(x.Status, RequestStatus.Done) &&
-                    x.IsExpiredDateOfGiveOut(DateTime.Today).Days < 365);
+            if (merchPack is null) throw new ArgumentNullException(nameof(merchPack));
+            if (merchPack.CanBeReissued) return true;
+            if (employeeId == 0) throw new ArgumentException($"Argument {nameof(employeeId)} mustn't be zero");
 
-            return repeatMerckPacks.Count != 0;
+            var repeatMerckPack = (await FindMerchRequestsAsync(it =>
+                    it.EmployeeId == employeeId &&
+                    Equals(it.MerchPackType, merchPack.Type) &&
+                    Equals(it.Status, RequestStatus.Done), cancellationToken))
+                .Last();
+
+            if (repeatMerckPack is null) return true;
+
+            return merchPack.CanBeReissuedAfterDays.Value <
+                   (DateTimeOffset.UtcNow - repeatMerckPack.DateOfCompleted).Days;
         }
 
-        public async Task<MerchRequest> CreateMerchRequestAsync(Employee employee, MerchPack merchPack,
+        public async Task<MerchRequest> CreateMerchRequestAsync(long employeeId,
+            ClothingSize clothingSize,
+            Email employeeEmail,
+            Email managerEmail,
+            MerchPack merchPack,
             CancellationToken cancellationToken = default)
         {
-            var merchRequest =
-                new MerchRequest(employee.Id, employee.Email,merchPack.Type, new List<MerchItem>(merchPack.Items));
+            var merchRequest = new MerchRequest();
+            merchRequest.Create(employeeId, clothingSize, employeeEmail, managerEmail);
+            var items = new List<MerchRequestItem>();
+            var stockItems = await _stockApiService.GetAllStockItemsAsync(cancellationToken);
+            foreach (var merchItem in merchPack.Items)
+            {
+                var stockItem = stockItems.FirstOrDefault(it =>
+                    it.ItemTypeId == merchItem.ItemType.Type.Id && it.ClothingSizeId == clothingSize.Id);
+                if (stockItem is null)
+                    throw new Exception(
+                        $"Stock item doesn't exist with type: {merchItem.ItemType.Type.Name} and clothing size{clothingSize.Name}");
+                items.Add(new MerchRequestItem(new Sku(stockItem.Sku), new Name(stockItem.Name),
+                    new Item(ItemType.Parse((int) stockItem.ItemTypeId)), merchItem.Quantity));
+            }
+
+            merchRequest.StartWork(merchPack, items);
             await _unitOfWork.StartTransaction(cancellationToken);
             await _merchRequestRepository.CreateAsync(merchRequest, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -95,24 +95,31 @@ namespace OzonEdu.MerchandiseService.Infrastructure.Services
         public async Task TryGiveOutMerchRequestAsync(MerchRequest merchRequest,
             CancellationToken cancellationToken = default)
         {
-            var reserveMerchItems = new List<MerchItem>();
-
-            foreach (var merchItem in merchRequest.Items)
+            if (await _stockApiService.GiveOutItemsAsync(merchRequest.Items.Select(it => new StockItemQuantityDto
             {
-                var stockQuantity =
-                    await _stockApiHttpClient.GetAvailableQuantity(merchItem.Sku.Value, cancellationToken);
-                if (merchItem.Quantity.Value == stockQuantity) reserveMerchItems.Add(merchItem);
+                Sku = it.Sku.Value,
+                Quantity = it.Quantity.Value
+            }).ToList(), cancellationToken))
+            {
+                await _notificationService.SendMessageAsync(merchRequest.EmployeeEmail,
+                    (MerchType) Enum.Parse(typeof(MerchType), merchRequest.MerchPackType.Name), cancellationToken);
+                await _notificationService.SendMessageAsync(merchRequest.ManagerEmail,
+                    $"Give out merch request number {merchRequest.RequestNumber}.", cancellationToken);
+                merchRequest.Complete();
+                await _unitOfWork.StartTransaction(cancellationToken);
+                await _merchRequestRepository.UpdateAsync(merchRequest, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
+        }
 
-            if (merchRequest.Items.Count != reserveMerchItems.Count) return;
+        public async Task<IReadOnlyCollection<MerchRequest>> FindMerchRequestsAsync(Func<MerchRequest, bool> predicate,
+            CancellationToken cancellationToken = default)
+            => (await _merchRequestRepository.FindAsync(predicate, cancellationToken)).OrderBy(it => it.DateOfCompleted)
+                .ToList();
 
-            foreach (var merchItem in merchRequest.Items)
-                await _stockApiHttpClient.GiveOut(merchItem.Sku.Value, merchItem.Quantity.Value, cancellationToken);
-
-            merchRequest.Complete(DateTime.Today);
-            await _unitOfWork.StartTransaction(cancellationToken);
-            await _merchRequestRepository.UpdateAsync(merchRequest, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }
