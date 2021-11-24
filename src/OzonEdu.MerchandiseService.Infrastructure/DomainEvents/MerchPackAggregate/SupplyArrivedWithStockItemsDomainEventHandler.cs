@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using OzonEdu.MerchandiseService.Domain.Events.MerchPackAggregate;
+using OzonEdu.MerchandiseService.Domain.Events.MerchRequestAggregate;
 using OzonEdu.MerchandiseService.Infrastructure.Workers.Interfaces;
 
 namespace OzonEdu.MerchandiseService.Infrastructure.DomainEvents.MerchPackAggregate
